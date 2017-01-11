@@ -7,15 +7,23 @@ public strictfp class RobotPlayer {
     static RobotController rc;
     static double twoPi = 2 * Math.PI;
 
+    // each robot should have a positional goal
+    // each robot should have a functional goal
+    // --attack target
+    // --water tree
+    // --etc
+    // these need to work in concert, parallel and coordinated
     static BehaviorTree scoutTree = new BehaviorTree();
 
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
 
+        PredicateSelector ps = new PredicateSelector();
         Predicate isInCorner = new IsInCornerPredicate();
-        scoutTree.addPredicate(isInCorner);
+        ps.addPredicate(isInCorner);
         Behavior seekCorner = new SeekCornerBehavior();
-        scoutTree.addBehavior(seekCorner);
+        ps.addBehavior(seekCorner);
+        scoutTree.setRoot(ps);
 
         RobotType rtype = rc.getType();
         switch (rtype) {

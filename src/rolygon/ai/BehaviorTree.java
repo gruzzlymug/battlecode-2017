@@ -7,24 +7,23 @@ import battlecode.common.*;
  */
 public class BehaviorTree {
     // predicate is optional
-    Predicate predicate;
-    Behavior behavior;
+    Node root;
 
     public BehaviorTree() {
     }
 
-    public void addPredicate(Predicate predicate) {
-        this.predicate = predicate;
-    }
-
-    public void addBehavior(Behavior behavior) {
-        this.behavior = behavior;
+    public void setRoot(Node root) {
+        this.root = root;
     }
 
     public void run(RobotController rc) throws GameActionException {
-        // rely on short-circuit...
-        if (predicate == null || predicate.test(rc).isTrue()) {
+        Behavior behavior = evaluate(rc);
+        if (behavior != null) {
             behavior.run(rc);
         }
+    }
+
+    private Behavior evaluate(RobotController rc) throws GameActionException {
+        return root.evaluate(rc);
     }
 }
