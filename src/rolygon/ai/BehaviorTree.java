@@ -3,10 +3,10 @@ package rolygon.ai;
 import battlecode.common.*;
 
 /**
- * Created by nobody on 1/11/2017.
+ * A Behavior Tree is ...
+ * ... and this is how it works ...
  */
 public class BehaviorTree {
-    // predicate is optional
     Node root;
 
     public BehaviorTree() {

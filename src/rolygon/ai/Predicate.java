@@ -8,4 +8,5 @@ import battlecode.common.*;
 public interface Predicate {
     public Predicate test(RobotController rc) throws GameActionException;
     public boolean isTrue();
+    public boolean isFalse();
 }
