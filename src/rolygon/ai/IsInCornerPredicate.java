@@ -16,4 +16,9 @@ public class IsInCornerPredicate implements Predicate {
     public boolean isTrue() {
         return false;
     }
+
+    @Override
+    public boolean isFalse() {
+        return true;
+    }
 }
