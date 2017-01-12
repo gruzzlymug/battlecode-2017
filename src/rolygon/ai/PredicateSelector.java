@@ -1,5 +1,8 @@
 package rolygon.ai;
 
+import battlecode.common.GameActionException;
+import battlecode.common.RobotController;
+
 /**
  * Created by nobody on 1/11/2017.
  * might want one of these that fires once a condition is hit and
@@ -16,5 +19,12 @@ public class PredicateSelector implements Selector {
 
     public void addBehavior(Behavior behavior) {
         this.behavior = behavior;
+    }
+
+    @Override
+    public void run(RobotController rc) throws GameActionException {
+        if (predicate.test(rc).isTrue()) {
+            behavior.run(rc);
+        }
     }
 }

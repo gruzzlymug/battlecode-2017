@@ -17,13 +17,6 @@ public class BehaviorTree {
     }
 
     public void run(RobotController rc) throws GameActionException {
-        Behavior behavior = evaluate(rc);
-        if (behavior != null) {
-            behavior.run(rc);
-        }
-    }
-
-    private Behavior evaluate(RobotController rc) throws GameActionException {
-        return root.evaluate(rc);
+        root.run(rc);
     }
 }
