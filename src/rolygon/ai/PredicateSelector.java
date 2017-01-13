@@ -22,25 +22,21 @@ public class PredicateSelector implements Selector {
     }
 
     @Override
-    public void run(RobotController rc) throws GameActionException {
+    public RunResult run(RobotController rc) throws GameActionException {
         try {
             if (predicate.test(rc).isFalse()) {
-                // TODO turn these into return values
-                // DIDN'T RUN
-                return;
+                return RunResult.SKIPPED;
             }
 
             behavior.run(rc);
 
-            // TODO consider (eventual) behavior run return value
             if (predicate.test(rc).isTrue()) {
-                // COMPLETED
-                System.out.println("completed");
-                return;
+                return RunResult.FINISHED;
             }
         } catch (GameActionException exception) {
-            // FAILURE
             System.out.println("failed");
+            return RunResult.FAILED;
         }
+        return RunResult.IN_PROGRESS;
     }
 }

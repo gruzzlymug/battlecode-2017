@@ -13,31 +13,33 @@ public strictfp class RobotPlayer {
     // --water tree
     // --etc
     // these need to work in concert, parallel and coordinated
-    static BehaviorTree scoutTree = new BehaviorTree();
 
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
 
-        PredicateSelector ps = new PredicateSelector();
-        Predicate isInCorner = new IsInCornerPredicate();
-        ps.addPredicate(isInCorner);
-        Behavior seekCorner = new SeekCornerBehavior();
-        ps.addBehavior(seekCorner);
-        scoutTree.setRoot(ps);
-
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
-                runArchon();
+                RandomMoveBehavior moveArchon = new RandomMoveBehavior();
+                BehaviorTree archonTree = new BehaviorTree(moveArchon);
+                runArchon(archonTree);
                 break;
             case GARDENER:
-                runGardener();
+                RandomMoveBehavior moveGardener = new RandomMoveBehavior();
+                BehaviorTree gardenerTree = new BehaviorTree(moveGardener);
+                runGardener(gardenerTree);
                 break;
             case LUMBERJACK:
                 runLumberjack();
                 break;
             case SCOUT:
-                runScout();
+                Sequence movement = new Sequence();
+                Behavior seekCorner = new SeekCornerBehavior();
+                movement.addNode(seekCorner);
+                RandomMoveBehavior moveScout = new RandomMoveBehavior();
+                movement.addNode(moveScout);
+                BehaviorTree scoutTree = new BehaviorTree(movement);
+                runScout(scoutTree);
                 break;
             case SOLDIER:
                 break;
@@ -46,41 +48,56 @@ public strictfp class RobotPlayer {
         }
     }
 
-    private static void runArchon() throws GameActionException {
+    private static void runArchon(BehaviorTree archonTree) throws GameActionException {
         while (true) {
+            common(rc);
             Direction dir = randomDirection();
             if (rc.canBuildRobot(RobotType.GARDENER, dir)) {
                 rc.buildRobot(RobotType.GARDENER, dir);
             }
+            archonTree.run(rc);
             Clock.yield();
         }
     }
 
-    private static void runGardener() throws GameActionException  {
+    private static void runGardener(BehaviorTree gardenerTree) throws GameActionException  {
         while (true) {
+            common(rc);
             Direction dir = randomDirection();
-            if (rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
-                rc.buildRobot(RobotType.LUMBERJACK, dir);
-            } else if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
+//            if (rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
+//                rc.buildRobot(RobotType.LUMBERJACK, dir);
+//            } else
+            if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
                 rc.buildRobot(RobotType.SCOUT, dir);
             }
+
+            gardenerTree.run(rc);
             Clock.yield();
         }
     }
 
     static void runLumberjack() throws GameActionException {
         while (true) {
+            common(rc);
             Clock.yield();
         }
     }
 
-    static void runScout() throws GameActionException {
+    static void runScout(BehaviorTree scoutTree) throws GameActionException {
         while (true) {
+            common(rc);
             scoutTree.run(rc);
             Clock.yield();
         }
     }
 
+    static void common(RobotController rc) {
+        if (rc.getRoundNum() > 250) {
+            rc.disintegrate();
+        }
+    }
+
+    // deprecated
     static Direction randomDirection() {
         return new Direction((float)Math.random() * 2 * (float)Math.PI);
     }
