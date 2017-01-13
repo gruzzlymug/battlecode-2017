@@ -9,19 +9,30 @@ import battlecode.common.RobotController;
  */
 public class Sequence implements Node {
     // TODO what are optimal storage strategies in terms of bytecode use? count access operations.
-    Node[] nodes = new Node[1];
+    Node[] nodes = new Node[4];
     int size;
     int currentBehavior;
 
-    public void addBehavior(Node behavior) {
+    public void addNode(Node behavior) {
         if (size >= nodes.length) {
+            System.out.println("WARNING: Attempted to add too many nodes");
             return;
         }
         nodes[size++] = behavior;
     }
 
     @Override
-    public void run(RobotController rc) throws GameActionException {
-        nodes[currentBehavior].run(rc);
+    public RunResult run(RobotController rc) throws GameActionException {
+        if (currentBehavior >= size) {
+            return RunResult.SKIPPED;
+        }
+        RunResult result = nodes[currentBehavior].run(rc);
+        if (result == RunResult.SKIPPED || result == RunResult.FINISHED) {
+            currentBehavior++;
+        }
+        if (currentBehavior >= size) {
+            return RunResult.FINISHED;
+        }
+        return RunResult.IN_PROGRESS;
     }
 }
