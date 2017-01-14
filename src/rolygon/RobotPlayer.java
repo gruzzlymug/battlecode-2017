@@ -48,9 +48,13 @@ public strictfp class RobotPlayer {
                 EnemyInRangePredicate enemyInRange = new EnemyInRangePredicate();
                 RangedAttackBehavior rangedAttack = new RangedAttackBehavior();
                 soldierAttack.addPredicate(enemyInRange);
-                soldierAttack.addNode(rangedAttack);
 
                 RandomMoveBehavior soldierMove = new RandomMoveBehavior();
+
+                Sequence attackSequence = new Sequence();
+                attackSequence.addNode(soldierMove);
+                attackSequence.addNode(rangedAttack);
+                soldierAttack.addNode(attackSequence);
 
                 PrioritySelector soldierPriorities = new PrioritySelector();
                 soldierPriorities.addNode(soldierAttack);
@@ -82,10 +86,11 @@ public strictfp class RobotPlayer {
             Direction dir = randomDirection();
             if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
                 rc.buildRobot(RobotType.SOLDIER, dir);
-            } else
-            if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
-                rc.buildRobot(RobotType.SCOUT, dir);
             }
+//            else
+//            if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
+//                rc.buildRobot(RobotType.SCOUT, dir);
+//            }
 
             gardenerTree.run(rc);
             Clock.yield();
@@ -124,9 +129,9 @@ public strictfp class RobotPlayer {
     }
 
     static void common(RobotController rc) {
-        if (rc.getRoundNum() > 250) {
-            rc.disintegrate();
-        }
+        //if (rc.getRoundNum() > 250) {
+        //    rc.disintegrate();
+        //}
     }
 
     // deprecated
