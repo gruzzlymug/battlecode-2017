@@ -8,12 +8,13 @@ import battlecode.common.*;
  */
 public class BehaviorTree {
     Node root;
+    Context context = new Context();
 
     public BehaviorTree(Node rootNode) {
         this.root = rootNode;
     }
 
     public void run(RobotController rc) throws GameActionException {
-        root.run(rc);
+        root.run(rc, context);
     }
 }

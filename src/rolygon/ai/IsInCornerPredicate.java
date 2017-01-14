@@ -10,7 +10,7 @@ public class IsInCornerPredicate implements Predicate {
     boolean isInCorner;
 
     @Override
-    public Predicate test(RobotController rc) throws GameActionException {
+    public Predicate test(RobotController rc, Context context) throws GameActionException {
         isInCorner = false;
 
         int numNearbyWalls = 0;
