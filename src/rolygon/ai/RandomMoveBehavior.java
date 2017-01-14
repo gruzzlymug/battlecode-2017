@@ -14,7 +14,7 @@ public class RandomMoveBehavior implements Behavior {
         if (rc.canMove(dir)) {
             rc.move(dir);
         }
-        return RunResult.IN_PROGRESS;
+        return RunResult.FINISHED;
     }
 
     Direction randomDirection() {

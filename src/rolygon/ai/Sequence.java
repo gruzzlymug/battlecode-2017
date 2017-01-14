@@ -32,6 +32,7 @@ public class Sequence implements Node {
             currentNode++;
         }
         if (currentNode >= size) {
+            currentNode = 0;
             return RunResult.FINISHED;
         }
         return RunResult.IN_PROGRESS;

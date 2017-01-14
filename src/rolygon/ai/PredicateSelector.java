@@ -11,13 +11,13 @@ import battlecode.common.RobotController;
  */
 public class PredicateSelector implements Selector {
     Predicate predicate;
-    Behavior node;
+    Node node;
 
     public void addPredicate(Predicate predicate) {
         this.predicate = predicate;
     }
 
-    public void addNode(Behavior node) {
+    public void addNode(Node node) {
         this.node = node;
     }
 
