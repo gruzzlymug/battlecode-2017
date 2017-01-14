@@ -42,6 +42,22 @@ public strictfp class RobotPlayer {
                 runScout(scoutTree);
                 break;
             case SOLDIER:
+                //UnderFirePredicate underFire = new UnderFirePredicate();
+
+                PredicateSelector soldierAttack = new PredicateSelector();
+                EnemyInRangePredicate enemyInRange = new EnemyInRangePredicate();
+                RangedAttackBehavior rangedAttack = new RangedAttackBehavior();
+                soldierAttack.addPredicate(enemyInRange);
+                soldierAttack.addNode(rangedAttack);
+
+                RandomMoveBehavior soldierMove = new RandomMoveBehavior();
+
+                PrioritySelector soldierPriorities = new PrioritySelector();
+                soldierPriorities.addNode(soldierAttack);
+                soldierPriorities.addNode(soldierMove);
+
+                BehaviorTree soldierTree = new BehaviorTree(soldierPriorities);
+                runSoldier(soldierTree);
                 break;
             case TANK:
                 break;
@@ -64,9 +80,9 @@ public strictfp class RobotPlayer {
         while (true) {
             common(rc);
             Direction dir = randomDirection();
-//            if (rc.canBuildRobot(RobotType.LUMBERJACK, dir)) {
-//                rc.buildRobot(RobotType.LUMBERJACK, dir);
-//            } else
+            if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
+                rc.buildRobot(RobotType.SOLDIER, dir);
+            } else
             if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
                 rc.buildRobot(RobotType.SCOUT, dir);
             }
@@ -87,6 +103,22 @@ public strictfp class RobotPlayer {
         while (true) {
             common(rc);
             scoutTree.run(rc);
+            Clock.yield();
+        }
+    }
+
+    static void runSoldier(BehaviorTree soldierTree) throws GameActionException {
+        while (true) {
+            common(rc);
+            soldierTree.run(rc);
+            Clock.yield();
+        }
+    }
+
+    static void runTank(BehaviorTree tankTree) throws GameActionException {
+        while (true) {
+            common(rc);
+            tankTree.run(rc);
             Clock.yield();
         }
     }

@@ -7,7 +7,7 @@ import battlecode.common.*;
  */
 public class SeekCornerBehavior implements Behavior {
     @Override
-    public RunResult run(RobotController rc) throws GameActionException {
+    public RunResult run(RobotController rc, Context context) throws GameActionException {
         Direction direction = new Direction((float)Math.PI / -2);
 //        if (rc.onTheMap()) {
             // completely on the map

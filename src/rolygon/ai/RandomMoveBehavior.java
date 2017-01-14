@@ -9,7 +9,7 @@ import battlecode.common.RobotController;
  */
 public class RandomMoveBehavior implements Behavior {
     @Override
-    public RunResult run(RobotController rc) throws GameActionException {
+    public RunResult run(RobotController rc, Context context) throws GameActionException {
         Direction dir = randomDirection();
         if (rc.canMove(dir)) {
             rc.move(dir);

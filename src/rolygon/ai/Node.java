@@ -10,5 +10,5 @@ public interface Node {
         SKIPPED, IN_PROGRESS, FINISHED, FAILED;
     }
 
-    public RunResult run(RobotController rc) throws GameActionException;
+    public RunResult run(RobotController rc, Context context) throws GameActionException;
 }
