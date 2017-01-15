@@ -1,6 +1,8 @@
 package rolygon.ai;
 
 import battlecode.common.*;
+import ddg.ai.Behavior;
+import ddg.ai.Context;
 
 /**
  * Created by nobody on 1/13/2017.

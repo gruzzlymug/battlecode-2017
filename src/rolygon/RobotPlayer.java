@@ -1,6 +1,7 @@
 package rolygon;
 
 import battlecode.common.*;
+import ddg.ai.*;
 import rolygon.ai.*;
 
 public strictfp class RobotPlayer {
@@ -32,7 +33,7 @@ public strictfp class RobotPlayer {
                 archonPriorities.addNode(archonDodge);
                 // TODO remove or fix before using. 644 rounds w/o it
                 //archonPriorities.addNode(archonAvoid);
-                archonPriorities.addNode(new ArchonBehavior());
+                archonPriorities.addNode(new BuildGardenersBehavior());
                 archonPriorities.addNode(new RandomMoveBehavior());
 
                 BehaviorTree archonTree = new BehaviorTree(archonPriorities);

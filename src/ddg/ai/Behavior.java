@@ -1,6 +1,4 @@
-package rolygon.ai;
-
-import battlecode.common.*;
+package ddg.ai;
 
 /**
  * Created by nobody on 1/11/2017.

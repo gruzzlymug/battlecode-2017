@@ -4,14 +4,17 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import battlecode.common.RobotType;
+import ddg.ai.Behavior;
+import ddg.ai.Context;
 import ddg.util.RandomDirection;
 
 /**
  * Created by nobody on 1/14/2017.
  */
 public class BuildOrderBehavior implements Behavior {
-    RobotType[] buildOrder = new RobotType[]{
-        RobotType.SCOUT, RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+    RobotType[] buildOrder = {
+        RobotType.SCOUT, null, RobotType.SOLDIER, RobotType.SOLDIER,
+        null, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.TANK,
     };
     int currentRobot;
 
@@ -21,16 +24,25 @@ public class BuildOrderBehavior implements Behavior {
             System.out.println("NOTHING LEFT TO BUILD");
             return RunResult.SKIPPED;
         }
-
         // TODO improve test and selection of direction
         Direction dir = RandomDirection.getDirection();
-        if (rc.canBuildRobot(buildOrder[currentRobot], dir)) {
-            rc.buildRobot(buildOrder[currentRobot], dir);
+        RobotType nextRobot = buildOrder[currentRobot];
+        if (nextRobot == null) {
+            // plant a tree
+            for (int i = 0; i < 20; i++) {
+                if (rc.canPlantTree(dir)) {
+                    rc.plantTree(dir);
+                    currentRobot++;
+                    return RunResult.FINISHED;
+                } else {
+                    dir = dir.rotateLeftDegrees(10);
+                }
+            }
+        } else if (rc.canBuildRobot(nextRobot, dir)) {
+            rc.buildRobot(nextRobot, dir);
             currentRobot++;
-            // TODO is it OK to return finished when build order not done 100%?
             return RunResult.FINISHED;
         }
-
         return RunResult.SKIPPED;
     }
 

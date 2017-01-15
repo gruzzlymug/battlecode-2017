@@ -2,6 +2,8 @@ package rolygon.ai;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
+import ddg.ai.Behavior;
+import ddg.ai.Context;
 
 /**
  * Created by nobody on 1/14/2017.

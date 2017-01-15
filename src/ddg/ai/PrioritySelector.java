@@ -1,7 +1,10 @@
-package rolygon.ai;
+package ddg.ai;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
+import ddg.ai.Context;
+import ddg.ai.Node;
+import ddg.ai.Selector;
 
 public class PrioritySelector implements Selector {
     Node[] nodes = new Node[4];

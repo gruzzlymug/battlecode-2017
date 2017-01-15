@@ -1,4 +1,4 @@
-package rolygon.ai;
+package ddg.ai;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
