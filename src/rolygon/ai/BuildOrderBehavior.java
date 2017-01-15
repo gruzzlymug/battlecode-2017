@@ -13,8 +13,9 @@ import ddg.util.RandomDirection;
  */
 public class BuildOrderBehavior implements Behavior {
     RobotType[] buildOrder = {
-        RobotType.SCOUT, null, RobotType.SOLDIER, RobotType.SOLDIER,
-        null, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.TANK,
+        RobotType.SCOUT,
+//        null, RobotType.SOLDIER, RobotType.SOLDIER,
+//        null, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.TANK,
     };
     int currentRobot;
 

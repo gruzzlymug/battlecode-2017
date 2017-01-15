@@ -143,8 +143,8 @@ public strictfp class RobotPlayer {
     }
 
     static void common(RobotController rc) {
-        //if (rc.getRoundNum() > 250) {
-        //    rc.disintegrate();
-        //}
+        if (rc.getRoundNum() > 250) {
+            rc.disintegrate();
+        }
     }
 }

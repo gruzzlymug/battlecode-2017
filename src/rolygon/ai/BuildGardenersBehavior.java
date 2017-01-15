@@ -14,7 +14,7 @@ import ddg.util.RandomDirection;
  * This needs to be much smarter, duh!
  */
 public class BuildGardenersBehavior implements Behavior {
-    final int MAX_GARDENERS = 3;
+    final int MAX_GARDENERS = 1;
     int numGardeners;
 
     @Override
