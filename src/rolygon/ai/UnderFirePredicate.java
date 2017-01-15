@@ -4,6 +4,9 @@ import battlecode.common.*;
 
 /**
  * Created by nobody on 1/13/2017.
+ *
+ * Context Interface
+ * out - "bullet" - BulletInfo of the closest bullet that will hit the robot!
  */
 public class UnderFirePredicate implements Predicate {
     boolean underFire;
@@ -12,11 +15,12 @@ public class UnderFirePredicate implements Predicate {
     // this is a simple implementation and could probably be much improved
     public Predicate test(RobotController rc, Context context) throws GameActionException {
         underFire = false;
-        MapLocation location = rc.getLocation();
-        BulletInfo[] bullets = rc.senseNearbyBullets();
+        MapLocation bodyLocation = rc.getLocation();
         float bodyRadius = rc.getType().bodyRadius;
+
+        BulletInfo[] bullets = rc.senseNearbyBullets();
         for (int idxBullet = 0; idxBullet < bullets.length; idxBullet++) {
-            if (willCollideWith(bullets[idxBullet], location, bodyRadius)) {
+            if (willCollideWith(bullets[idxBullet], bodyLocation, bodyRadius)) {
                 underFire = true;
                 context.memorize("bullet", bullets[idxBullet]);
                 break;

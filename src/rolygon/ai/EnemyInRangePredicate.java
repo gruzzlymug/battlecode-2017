@@ -4,6 +4,9 @@ import battlecode.common.*;
 
 /**
  * Created by nobody on 1/13/2017.
+ *
+ * Context Interface
+ * out - "nearby_enemies" - array of sensed enemy robots
  */
 public class EnemyInRangePredicate implements Predicate {
     boolean foundEnemies;
