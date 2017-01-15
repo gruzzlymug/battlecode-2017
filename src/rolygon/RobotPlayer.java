@@ -20,13 +20,27 @@ public strictfp class RobotPlayer {
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
-                RandomMoveBehavior moveArchon = new RandomMoveBehavior();
-                BehaviorTree archonTree = new BehaviorTree(moveArchon);
+                PredicateSelector archonDodge = new PredicateSelector();
+                archonDodge.addPredicate(new UnderFirePredicate());
+                archonDodge.addNode(new DodgeBulletBehavior());
+
+                PrioritySelector archonPriorities = new PrioritySelector();
+                archonPriorities.addNode(archonDodge);
+                archonPriorities.addNode(new RandomMoveBehavior());
+
+                BehaviorTree archonTree = new BehaviorTree(archonPriorities);
                 runArchon(archonTree);
                 break;
             case GARDENER:
-                RandomMoveBehavior moveGardener = new RandomMoveBehavior();
-                BehaviorTree gardenerTree = new BehaviorTree(moveGardener);
+                PredicateSelector gardenerDodge = new PredicateSelector();
+                gardenerDodge.addPredicate(new UnderFirePredicate());
+                gardenerDodge.addNode(new DodgeBulletBehavior());
+
+                PrioritySelector gardenerPriorities = new PrioritySelector();
+                gardenerPriorities.addNode(gardenerDodge);
+                gardenerPriorities.addNode(new RandomMoveBehavior());
+
+                BehaviorTree gardenerTree = new BehaviorTree(gardenerPriorities);
                 runGardener(gardenerTree);
                 break;
             case LUMBERJACK:
@@ -42,23 +56,21 @@ public strictfp class RobotPlayer {
                 runScout(scoutTree);
                 break;
             case SOLDIER:
-                //UnderFirePredicate underFire = new UnderFirePredicate();
+                PredicateSelector soldierDodge = new PredicateSelector();
+                soldierDodge.addPredicate(new UnderFirePredicate());
+                soldierDodge.addNode(new DodgeBulletBehavior());
 
                 PredicateSelector soldierAttack = new PredicateSelector();
-                EnemyInRangePredicate enemyInRange = new EnemyInRangePredicate();
-                RangedAttackBehavior rangedAttack = new RangedAttackBehavior();
-                soldierAttack.addPredicate(enemyInRange);
-
-                RandomMoveBehavior soldierMove = new RandomMoveBehavior();
-
+                soldierAttack.addPredicate(new EnemyInRangePredicate());
                 Sequence attackSequence = new Sequence();
-                attackSequence.addNode(soldierMove);
-                attackSequence.addNode(rangedAttack);
+                attackSequence.addNode(new RandomMoveBehavior());
+                attackSequence.addNode(new RangedAttackBehavior());
                 soldierAttack.addNode(attackSequence);
 
                 PrioritySelector soldierPriorities = new PrioritySelector();
+                soldierPriorities.addNode(soldierDodge);
                 soldierPriorities.addNode(soldierAttack);
-                soldierPriorities.addNode(soldierMove);
+                soldierPriorities.addNode(new RandomMoveBehavior());
 
                 BehaviorTree soldierTree = new BehaviorTree(soldierPriorities);
                 runSoldier(soldierTree);
