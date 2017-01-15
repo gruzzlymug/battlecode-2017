@@ -5,6 +5,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
+import ddg.util.RandomDirection;
 
 /**
  * Created by nobody on 1/12/2017.
@@ -12,14 +13,10 @@ import ddg.ai.Context;
 public class RandomMoveBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        Direction dir = randomDirection();
+        Direction dir = RandomDirection.getDirection();
         if (rc.canMove(dir)) {
             rc.move(dir);
         }
         return RunResult.FINISHED;
-    }
-
-    Direction randomDirection() {
-        return new Direction((float)Math.random() * 2 * (float)Math.PI);
     }
 }
