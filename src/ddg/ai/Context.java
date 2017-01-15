@@ -1,4 +1,4 @@
-package rolygon.ai;
+package ddg.ai;
 
 import java.util.HashMap;
 
@@ -8,11 +8,11 @@ import java.util.HashMap;
 public class Context {
     HashMap memory = new HashMap();
 
-    void memorize(String key, Object value) {
+    public void memorize(String key, Object value) {
         memory.put(key, value);
     }
 
-    Object recall(String key) {
+    public Object recall(String key) {
         return memory.get(key);
     }
 }

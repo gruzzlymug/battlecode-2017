@@ -1,6 +1,8 @@
 package rolygon.ai;
 
 import battlecode.common.*;
+import ddg.ai.Behavior;
+import ddg.ai.Context;
 
 public class DodgeBulletBehavior implements Behavior {
     @Override
