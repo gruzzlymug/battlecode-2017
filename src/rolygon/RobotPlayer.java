@@ -24,8 +24,15 @@ public strictfp class RobotPlayer {
                 archonDodge.addPredicate(new UnderFirePredicate());
                 archonDodge.addNode(new DodgeBulletBehavior());
 
+                PredicateSelector archonAvoid = new PredicateSelector();
+                archonAvoid.addPredicate(new EnemyInRangePredicate());
+                archonAvoid.addNode(new AvoidEnemyBehavior());
+
                 PrioritySelector archonPriorities = new PrioritySelector();
                 archonPriorities.addNode(archonDodge);
+                // TODO remove or fix before using. 644 rounds w/o it
+                //archonPriorities.addNode(archonAvoid);
+                archonPriorities.addNode(new ArchonBehavior());
                 archonPriorities.addNode(new RandomMoveBehavior());
 
                 BehaviorTree archonTree = new BehaviorTree(archonPriorities);
@@ -36,8 +43,15 @@ public strictfp class RobotPlayer {
                 gardenerDodge.addPredicate(new UnderFirePredicate());
                 gardenerDodge.addNode(new DodgeBulletBehavior());
 
+                PredicateSelector gardenerAvoid = new PredicateSelector();
+                gardenerAvoid.addPredicate(new EnemyInRangePredicate());
+                gardenerAvoid.addNode(new AvoidEnemyBehavior());
+
                 PrioritySelector gardenerPriorities = new PrioritySelector();
                 gardenerPriorities.addNode(gardenerDodge);
+                // TODO remove or fix before using. 644 rounds w/o it
+                //gardenerPriorities.addNode(gardenerAvoid);
+                gardenerPriorities.addNode(new BuildOrderBehavior());
                 gardenerPriorities.addNode(new RandomMoveBehavior());
 
                 BehaviorTree gardenerTree = new BehaviorTree(gardenerPriorities);
@@ -83,10 +97,6 @@ public strictfp class RobotPlayer {
     private static void runArchon(BehaviorTree archonTree) throws GameActionException {
         while (true) {
             common(rc);
-            Direction dir = randomDirection();
-            if (rc.canBuildRobot(RobotType.GARDENER, dir)) {
-                rc.buildRobot(RobotType.GARDENER, dir);
-            }
             archonTree.run(rc);
             Clock.yield();
         }
@@ -95,15 +105,6 @@ public strictfp class RobotPlayer {
     private static void runGardener(BehaviorTree gardenerTree) throws GameActionException  {
         while (true) {
             common(rc);
-            Direction dir = randomDirection();
-            if (rc.canBuildRobot(RobotType.SOLDIER, dir)) {
-                rc.buildRobot(RobotType.SOLDIER, dir);
-            }
-//            else
-//            if (rc.canBuildRobot(RobotType.SCOUT, dir)) {
-//                rc.buildRobot(RobotType.SCOUT, dir);
-//            }
-
             gardenerTree.run(rc);
             Clock.yield();
         }
@@ -144,10 +145,5 @@ public strictfp class RobotPlayer {
         //if (rc.getRoundNum() > 250) {
         //    rc.disintegrate();
         //}
-    }
-
-    // deprecated
-    static Direction randomDirection() {
-        return new Direction((float)Math.random() * 2 * (float)Math.PI);
     }
 }
