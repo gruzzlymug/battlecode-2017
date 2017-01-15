@@ -20,8 +20,7 @@ public class BuildOrderBehavior implements Behavior {
 
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        if (currentRobot > buildOrder.length) {
-            System.out.println("NOTHING LEFT TO BUILD");
+        if (currentRobot >= buildOrder.length) {
             return RunResult.SKIPPED;
         }
         // TODO improve test and selection of direction
