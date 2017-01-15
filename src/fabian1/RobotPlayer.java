@@ -1,28 +1,33 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: ; c-file-style: "linux" -*- */
-
 package fabian1;
+
 import battlecode.common.*;
+
+import fabian1.ringbuffer.*;
+import fabian1.fibonaccicounter.*;
 
 public strictfp class RobotPlayer
 {
     static RobotController rc;
-
+    static int tmp;
+    static MapLocation m_location;
+    
     // Location history ring buffer and associated variables
-    private static final int LOCATION_HISTORY_SIZE = 256;
-    private static MapLocation location_history[];
-    private static byte test;
-	
+    private static RingBuffer< MapLocation > m_location_history;
+    private static RingBuffer< Direction >   m_direction_history;
     
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
      * If this method returns, the robot dies!
      **/
     @SuppressWarnings( "unused" )
-    public static void run( RobotController rc ) throws GameActionException
+    public static void run( RobotController rc )
+	throws GameActionException
     {
 	// init location history
-	location_history = new MapLocation[ LOCATION_HISTORY_SIZE ];
-	test = 120;
+	m_location_history  = new RingBuffer< MapLocation >( 10 );
+	m_direction_history = new RingBuffer< Direction >( 10 );
+	m_location          = rc.getLocation();
 	
 	// This is the RobotController object. You use it to perform actions from this robot,
 	// and to get information on its current status.
@@ -32,31 +37,30 @@ public strictfp class RobotPlayer
 	// You can add the missing ones or rewrite this into your own control structure.
 	switch( rc.getType() )
             {
-            case ARCHON:
+	    case ARCHON:
                 runArchon();
                 break;
-            case GARDENER:
+	    case GARDENER:
                 runGardener();
                 break;
             case SOLDIER:
-                runSoldier();
+                //runSoldier();
                 break;
             case LUMBERJACK:
-                runLumberjack();
+                //runLumberjack();
                 break;
             case SCOUT:
                 runScout();
                 break;
             case TANK:
-                runTank();
+                //runTank();
                 break;
             }
     }
 
-    static void runArchon() throws GameActionException
+    static void runArchon()
+	throws GameActionException
     {
-	System.out.println( "I'm an archon!" );
-
 	// The code you want your robot to perform every round should be in this loop
 	while( true )
             {
@@ -67,18 +71,18 @@ public strictfp class RobotPlayer
 			Direction dir = randomDirection();
             
 			// Randomly attempt to build a gardener in this direction
-			if( rc.canHireGardener( dir ) && Math.random() < .01 )
+			if( rc.canHireGardener( dir ) )
 			    {
 				rc.hireGardener( dir );
 			    }
 
-			// Move randomly
-			tryMove( randomDirection() );
-
+			dir = randomDirection();
+			// Move randomly			
+			tryMove( dir );
+			
 			// Broadcast archon's location for other robots on the team to know
-			MapLocation myLocation = rc.getLocation();
-			rc.broadcast( 0, ( int )myLocation.x );
-			rc.broadcast( 1, ( int ) myLocation.y );
+			rc.broadcast( 0, ( int )m_location.x );
+			rc.broadcast( 1, ( int )m_location.y );
 
 			// Clock.yield() makes the robot wait until the next turn, then it will perform this loop again
 			Clock.yield();
@@ -91,10 +95,9 @@ public strictfp class RobotPlayer
             }
     }
 
-    static void runGardener() throws GameActionException
+    static void runGardener()
+	throws GameActionException
     {
-	System.out.println( "I'm a gardener!" );
-
 	// The code you want your robot to perform every round should be in this loop
 	while( true )
             {
@@ -110,17 +113,15 @@ public strictfp class RobotPlayer
 			Direction dir = randomDirection();
 
 			// Randomly attempt to build a soldier or lumberjack in this direction
-			if( rc.canBuildRobot( RobotType.SOLDIER, dir ) && Math.random() < .01 )
+			if( rc.canBuildRobot( RobotType.SCOUT, dir ) )
 			    {
-				rc.buildRobot( RobotType.SOLDIER, dir );
-			    } else if( rc.canBuildRobot( RobotType.LUMBERJACK, dir ) && Math.random() < .01 && rc.isBuildReady() )
-			    {
-				rc.buildRobot( RobotType.LUMBERJACK, dir );
+				rc.buildRobot( RobotType.SCOUT, dir );
 			    }
 
 			// Move randomly
-			tryMove( randomDirection() );
-
+			dir = randomDirection();
+			tryMove( dir );
+			
 			// Clock.yield() makes the robot wait until the next turn, then it will perform this loop again
 			Clock.yield();
 		    }
@@ -132,9 +133,9 @@ public strictfp class RobotPlayer
             }
     }
 
-    static void runSoldier() throws GameActionException
+    static void runSoldier()
+	throws GameActionException
     {
-	System.out.println( "I'm an soldier!" );
 	Team enemy = rc.getTeam().opponent();
 
 	// The code you want your robot to perform every round should be in this loop
@@ -173,9 +174,9 @@ public strictfp class RobotPlayer
             }
     }
 
-    static void runLumberjack() throws GameActionException
+    static void runLumberjack()
+	throws GameActionException
     {
-	System.out.println( "I'm a lumberjack!" );
 	Team enemy = rc.getTeam().opponent();
 
 	// The code you want your robot to perform every round should be in this loop
@@ -224,9 +225,9 @@ public strictfp class RobotPlayer
             }
     }
 
-    static void runScout() throws GameActionException
+    static void runScout()
+	throws GameActionException
     {
-	System.out.println( "I'm an scout!" );
 	Team enemy = rc.getTeam().opponent();
 
 	// The code you want your robot to perform every round should be in this loop                                                                                                                                          
@@ -236,7 +237,7 @@ public strictfp class RobotPlayer
                 try
 		    {
 			MapLocation myLocation = rc.getLocation();
-		
+			
 			// See if there are any nearby enemy robots
 			RobotInfo[] robots = rc.senseNearbyRobots( -1, enemy );
 
@@ -265,9 +266,9 @@ public strictfp class RobotPlayer
             }
     }
 
-    static void runTank() throws GameActionException
+    static void runTank()
+	throws GameActionException
     {
-	System.out.println( "I'm an tank!" );
 	Team enemy = rc.getTeam().opponent();
 
 	// The code you want your robot to perform every round should be in this loop
@@ -325,7 +326,14 @@ public strictfp class RobotPlayer
     static boolean tryMove( Direction dir )
         throws GameActionException
     {
-	return tryMove( dir, 20, 3 );
+	if( tryMove( dir, 20, 3 ) )
+	    {
+		m_direction_history.push_back( dir );
+		m_location_history.push_back( m_location );
+		m_location = rc.getLocation();
+		return true;
+	    }
+	return false;
     }
 
     /**
