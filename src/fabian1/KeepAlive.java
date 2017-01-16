@@ -3,21 +3,29 @@ package fabian1.keepalive;
 
 public class KeepAlive
 {
-    private int m_encoded_pulse;
+    private final int BIT_AND   = 0xff;
+    private final int BIT_SHIFT = 8;
     
-    public KeepAlive( int i_robot_id )
-    {
-	String tmp = Integer.toHexString( i_robot_id );
-	System.out.print( "ID = " );
-	System.out.print( tmp );
-	System.out.print( "\n" );
-
-	m_encoded_pulse = 0;
-    }
+    private int   m_encoded_pulse;
+    private int[] m_decoded_pulse;
     
-    public int Encode32()
+    public KeepAlive( int i_robot_id, int other )
     {
-	return m_encoded_pulse;
+	m_encoded_pulse =
+	    ( i_robot_id & BIT_AND ) |
+	    ( ( other & BIT_AND ) << BIT_SHIFT );
     }
 
+    public KeepAlive( int i_encoded_pulse )
+    {
+	m_decoded_pulse = new int[ 2 ];
+	m_decoded_pulse[ 0 ] = i_encoded_pulse & BIT_AND;
+	m_decoded_pulse[ 1 ] = ( i_encoded_pulse >> BIT_SHIFT ) & BIT_AND;
+    }
+    
+    public int encoded32()
+    { return m_encoded_pulse; }
+    
+    public int[] decoded32()
+    { return m_decoded_pulse; }
 }
