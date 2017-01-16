@@ -3,18 +3,21 @@ package fabian1;
 
 import battlecode.common.*;
 
+import fabian1.keepalive.*;
 import fabian1.ringbuffer.*;
 import fabian1.fibonaccicounter.*;
 
 public strictfp class RobotPlayer
 {
     static RobotController rc;
-    static int tmp;
     static MapLocation m_location;
     
     // Location history ring buffer and associated variables
     private static RingBuffer< MapLocation > m_location_history;
     private static RingBuffer< Direction >   m_direction_history;
+
+    //
+    private static KeepAlive m_keep_alive;
     
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
@@ -28,11 +31,13 @@ public strictfp class RobotPlayer
 	m_location_history  = new RingBuffer< MapLocation >( 10 );
 	m_direction_history = new RingBuffer< Direction >( 10 );
 	m_location          = rc.getLocation();
+
+	m_keep_alive = new KeepAlive( rc.getID() );
 	
 	// This is the RobotController object. You use it to perform actions from this robot,
 	// and to get information on its current status.
 	RobotPlayer.rc = rc;
-
+	
 	// Here, we've separated the controls into a different method for each RobotType.
 	// You can add the missing ones or rewrite this into your own control structure.
 	switch( rc.getType() )
