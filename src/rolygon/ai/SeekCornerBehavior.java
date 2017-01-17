@@ -24,6 +24,9 @@ public class SeekCornerBehavior implements Behavior {
     boolean[] found = { false, false, false, false };
     int goal;
 
+    int limits[] = {100, 100, 0, 0};
+
+
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         boolean canGoUp = rc.canMove(up);
@@ -68,7 +71,7 @@ public class SeekCornerBehavior implements Behavior {
         switch (goal) {
             case 0:
                 // ur
-                if (tryMove(rc, new Direction((float)Math.PI/4), (float)22.5, 1)) {
+                if (tryMove(rc, new Direction((float)Math.PI/4), (float)45, 1)) {
                     return RunResult.IN_PROGRESS;
                 }
                 break;
