@@ -13,13 +13,15 @@ public class ManageForestBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         // plant a tree
-        Direction dir = RandomDirection.getDirection();
-        for (int i = 0; i < 10; i++) {
-            if (rc.canPlantTree(dir)) {
-                rc.plantTree(dir);
-                return RunResult.FINISHED;
-            } else {
-                dir = dir.rotateLeftDegrees(23);
+        if (rc.getRoundNum() % 50 == 0) {
+            Direction dir = RandomDirection.getDirection();
+            for (int i = 0; i < 10; i++) {
+                if (rc.canPlantTree(dir)) {
+                    rc.plantTree(dir);
+                    return RunResult.FINISHED;
+                } else {
+                    dir = dir.rotateLeftDegrees(23);
+                }
             }
         }
         // water nearby trees
@@ -43,7 +45,7 @@ public class ManageForestBehavior implements Behavior {
     // select K trees with the lowest health.
     // probably overkill, just water anything less than healthy.
     private static TreeInfo[] selectDyingTrees(TreeInfo[] trees, int k) {
-        if (trees.length <= k) {
+        if (trees.length < k) {
             return trees;
         }
 
