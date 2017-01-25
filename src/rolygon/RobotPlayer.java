@@ -36,7 +36,12 @@ public strictfp class RobotPlayer {
                 archonPriorities.addNode(new BuildGardenersBehavior());
                 archonPriorities.addNode(new RandomMoveBehavior());
 
-                BehaviorTree archonTree = new BehaviorTree(archonPriorities);
+                // perform standard think and then run priorities
+                Sequence archonSequence = new Sequence();
+                archonSequence.addNode(new ArchonThinkBehavior());
+                archonSequence.addNode(archonPriorities);
+
+                BehaviorTree archonTree = new BehaviorTree(archonSequence);
                 runArchon(archonTree);
                 break;
             case GARDENER:
@@ -52,6 +57,7 @@ public strictfp class RobotPlayer {
                 gardenerPriorities.addNode(gardenerDodge);
                 // TODO remove or fix before using. 644 rounds w/o it
                 //gardenerPriorities.addNode(gardenerAvoid);
+                gardenerPriorities.addNode(new ManageForestBehavior());
                 gardenerPriorities.addNode(new BuildOrderBehavior());
                 gardenerPriorities.addNode(new RandomMoveBehavior());
 
@@ -143,8 +149,8 @@ public strictfp class RobotPlayer {
     }
 
     static void common(RobotController rc) {
-        //if (rc.getRoundNum() > 250) {
-        //    rc.disintegrate();
-        //}
+//        if (rc.getRoundNum() > 250) {
+//            rc.disintegrate();
+//        }
     }
 }
