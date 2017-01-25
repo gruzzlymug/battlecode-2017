@@ -19,6 +19,18 @@ public class BuildOrderBehavior implements Behavior {
         RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
         RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
         RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
     };
     int currentRobot;
 
