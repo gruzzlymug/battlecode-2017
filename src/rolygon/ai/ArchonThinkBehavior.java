@@ -16,6 +16,12 @@ public class ArchonThinkBehavior implements Behavior {
         rc.senseNearbyTrees();
         rc.senseNearbyRobots();
 
+        // late game strategy...
+        if (rc.getRoundNum() > 2990) {
+            // no need for bullets
+            rc.donate(rc.getTeamBullets());
+        }
+
         if (rc.getTeamBullets() > 200) {
             rc.donate(10);
         }
