@@ -14,6 +14,7 @@ import ddg.util.RandomDirection;
  * This needs to be much smarter, duh!
  */
 public class BuildGardenersBehavior implements Behavior {
+    // TODO this should not be a hard limit!
     final int MAX_GARDENERS = 10;
     int numGardeners;
 

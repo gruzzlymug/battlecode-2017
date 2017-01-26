@@ -10,6 +10,10 @@ import ddg.util.RandomDirection;
 
 /**
  * Created by nobody on 1/14/2017.
+ *
+ * Create API to configure behavior.
+ * Create piece-wise functions for builds. Allow simple scripting:
+ * loops, conditionals (e.g. if enemy forces are X, build Y), etc.
  */
 public class BuildOrderBehavior implements Behavior {
     RobotType[] buildOrder;

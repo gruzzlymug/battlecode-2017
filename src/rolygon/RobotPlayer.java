@@ -18,6 +18,15 @@ public strictfp class RobotPlayer {
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
 
+        RobotType[] buildOrder = {
+            RobotType.SOLDIER, RobotType.SCOUT, RobotType.LUMBERJACK,
+            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+        };
+
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
@@ -29,7 +38,8 @@ public strictfp class RobotPlayer {
                 runGardener(new BehaviorTree(gardenerBehaviors));
                 break;
             case LUMBERJACK:
-                runLumberjack();
+                BehaviorTree lumberjackTree = new BehaviorTree(new ClearCutBehavior());
+                runLumberjack(lumberjackTree);
                 break;
             case SCOUT:
                 Node scoutBehaviors = createScoutBehaviors();
@@ -156,9 +166,10 @@ public strictfp class RobotPlayer {
         }
     }
 
-    static void runLumberjack() throws GameActionException {
+    static void runLumberjack(BehaviorTree lumberjackTree) throws GameActionException {
         while (true) {
             common(rc);
+            lumberjackTree.run(rc);
             Clock.yield();
         }
     }
