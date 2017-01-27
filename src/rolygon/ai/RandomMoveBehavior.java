@@ -19,7 +19,7 @@ public class RandomMoveBehavior implements Behavior {
                 dir = rc.getLocation().directionTo(enemyArchonLocations[0]);
             }
         }
-        if (rc.canMove(dir)) {
+        if (rc.canMove(dir) && !rc.hasMoved()) {
             rc.move(dir);
         }
         return RunResult.FINISHED;

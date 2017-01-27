@@ -34,9 +34,9 @@ public class ManageForestBehavior implements Behavior {
         for (TreeInfo tree : threeWorst) {
             MapLocation treeLocation = tree.getLocation();
             Direction toTree = rc.getLocation().directionTo(treeLocation);
-//            if (rc.canMove(toTree)) {
-//                rc.move(toTree);
-//            }
+            if (rc.canMove(toTree) && !rc.hasMoved()) {
+                rc.move(toTree);
+            }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
                 return RunResult.FINISHED;
