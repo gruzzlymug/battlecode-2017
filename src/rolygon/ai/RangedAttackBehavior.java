@@ -11,13 +11,13 @@ public class RangedAttackBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         RobotInfo[] nearbyEnemies = (RobotInfo[]) context.recall("nearby_enemies");
-        //System.out.println(nearbyEnemies.length + " nearby enemies!");
         if (nearbyEnemies.length > 0) {
+            RobotInfo target = nearbyEnemies[0];
             MapLocation here = rc.getLocation();
-            MapLocation goal = nearbyEnemies[0].getLocation();
+            MapLocation goal = target.getLocation();
             Direction toGoal = here.directionTo(goal);
             float howFar = here.distanceTo(goal);
-            if (howFar > 9) {
+            if (howFar > rc.getType().sensorRadius / 2) {
                 if (rc.canMove(toGoal)) {
                     rc.move(toGoal);
                 }

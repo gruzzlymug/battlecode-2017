@@ -6,7 +6,7 @@ import rolygon.ai.*;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
-    static double twoPi = 2 * Math.PI;
+    static Team enemyTeam;
 
     // each robot should have a positional goal
     // each robot should have a functional goal
@@ -17,6 +17,7 @@ public strictfp class RobotPlayer {
 
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
+        RobotPlayer.enemyTeam = rc.getTeam().opponent();
 
         RobotType rtype = rc.getType();
         switch (rtype) {
