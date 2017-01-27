@@ -33,6 +33,10 @@ public class ManageForestBehavior implements Behavior {
         // take the 3 worst and try to water one of them
         for (TreeInfo tree : threeWorst) {
             MapLocation treeLocation = tree.getLocation();
+            Direction toTree = rc.getLocation().directionTo(treeLocation);
+//            if (rc.canMove(toTree)) {
+//                rc.move(toTree);
+//            }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
                 return RunResult.FINISHED;

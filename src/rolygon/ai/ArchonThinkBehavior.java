@@ -23,8 +23,8 @@ public class ArchonThinkBehavior implements Behavior {
         }
 
         if (rc.getTeamBullets() > 200) {
-            rc.donate(10);
+            rc.donate(5);
         }
-        return RunResult.FINISHED;
+        return RunResult.SKIPPED;
     }
 }
