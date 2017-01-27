@@ -18,11 +18,11 @@ public class RangedAttackBehavior implements Behavior {
             Direction toGoal = here.directionTo(goal);
             float howFar = here.distanceTo(goal);
             if (howFar > rc.getType().sensorRadius / 2) {
-                if (rc.canMove(toGoal)) {
+                if (rc.canMove(toGoal) && !rc.hasMoved()) {
                     rc.move(toGoal);
                 }
             } else {
-                if (rc.canMove(toGoal.opposite())) {
+                if (rc.canMove(toGoal.opposite()) && !rc.hasMoved()) {
                     toGoal.opposite();
                 }
             }
@@ -30,12 +30,13 @@ public class RangedAttackBehavior implements Behavior {
 //                // ...Then fire a bullet in the direction of the enemy.
 //                rc.fireTriadShot(toGoal);
 //            }
+            // And we have enough bullets, and haven't attacked yet this turn...
+            if (rc.canFireSingleShot()) {
+                // ...Then fire a bullet in the direction of the enemy.
+                rc.fireSingleShot(rc.getLocation().directionTo(nearbyEnemies[0].location));
+            }
+            return RunResult.FINISHED;
         }
-        // And we have enough bullets, and haven't attacked yet this turn...
-        if (rc.canFireSingleShot()) {
-            // ...Then fire a bullet in the direction of the enemy.
-            rc.fireSingleShot(rc.getLocation().directionTo(nearbyEnemies[0].location));
-        }
-        return RunResult.FINISHED;
+        return RunResult.SKIPPED;
     }
 }

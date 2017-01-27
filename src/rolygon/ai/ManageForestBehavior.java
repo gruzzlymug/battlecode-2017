@@ -12,7 +12,7 @@ public class ManageForestBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         // plant a tree
-        if (rc.getRoundNum() % 50 == 0) {
+        if (rc.getRoundNum() % 40 == 0) {
             Direction dir = Randomizer.getRandomDirection();
             for (int i = 0; i < 10; i++) {
                 if (rc.canPlantTree(dir)) {
@@ -33,6 +33,10 @@ public class ManageForestBehavior implements Behavior {
         // take the 3 worst and try to water one of them
         for (TreeInfo tree : threeWorst) {
             MapLocation treeLocation = tree.getLocation();
+            Direction toTree = rc.getLocation().directionTo(treeLocation);
+            if (rc.canMove(toTree) && !rc.hasMoved()) {
+                rc.move(toTree);
+            }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
                 return RunResult.FINISHED;

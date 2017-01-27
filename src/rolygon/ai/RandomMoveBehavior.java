@@ -16,10 +16,12 @@ public class RandomMoveBehavior implements Behavior {
             boolean shouldSeekArchon = (Randomizer.rollDie(8) == 3);
             if (shouldSeekArchon) {
                 MapLocation[] enemyArchonLocations = (MapLocation[])context.recall("enemy_archon_locations");
-                dir = rc.getLocation().directionTo(enemyArchonLocations[0]);
+                int numArchons = enemyArchonLocations.length;
+                int idxArchon = rc.getID() % numArchons;
+                dir = rc.getLocation().directionTo(enemyArchonLocations[idxArchon]);
             }
         }
-        if (rc.canMove(dir)) {
+        if (rc.canMove(dir) && !rc.hasMoved()) {
             rc.move(dir);
         }
         return RunResult.FINISHED;

@@ -1,10 +1,8 @@
 package rolygon.ai;
 
-import battlecode.common.GameActionException;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
-import ddg.ai.Node;
 
 /**
  * Created by nobody on 1/16/2017.
@@ -12,6 +10,25 @@ import ddg.ai.Node;
 public class ClearCutBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        return null;
+        MapLocation robotLocation = rc.getLocation();
+        TreeInfo[] trees = rc.senseNearbyTrees();
+        for (TreeInfo tree : trees) {
+            if (tree.getTeam() == rc.getTeam()) {
+                continue;
+            }
+            MapLocation treeLocation = tree.getLocation();
+            if (rc.canShake(treeLocation)) {
+                rc.shake(treeLocation);
+            }
+            Direction toTree = robotLocation.directionTo(treeLocation);
+            if (rc.canMove(toTree) && !rc.hasMoved()) {
+                rc.move(toTree);
+            }
+            if (rc.canChop(treeLocation)) {
+                rc.chop(treeLocation);
+                return RunResult.IN_PROGRESS;
+            }
+        }
+        return RunResult.SKIPPED;
     }
 }

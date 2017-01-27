@@ -30,7 +30,8 @@ public strictfp class RobotPlayer {
                 runGardener(new BehaviorTree(gardenerBehaviors));
                 break;
             case LUMBERJACK:
-                BehaviorTree lumberjackTree = new BehaviorTree(new ClearCutBehavior());
+                Node lumberjackBehaviors = createLumberjackBehaviors();
+                BehaviorTree lumberjackTree = new BehaviorTree(lumberjackBehaviors);
                 runLumberjack(lumberjackTree);
                 break;
             case SCOUT:
@@ -75,16 +76,10 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
@@ -99,9 +94,9 @@ public strictfp class RobotPlayer {
         gardenerDodge.addPredicate(new UnderFirePredicate());
         gardenerDodge.addNode(new DodgeBulletBehavior());
 
-        PredicateSelector gardenerAvoid = new PredicateSelector();
-        gardenerAvoid.addPredicate(new EnemyInRangePredicate());
-        gardenerAvoid.addNode(new AvoidEnemyBehavior());
+        //PredicateSelector gardenerAvoid = new PredicateSelector();
+        //gardenerAvoid.addPredicate(new EnemyInRangePredicate());
+        //gardenerAvoid.addNode(new AvoidEnemyBehavior());
 
         PrioritySelector gardenerPriorities = new PrioritySelector();
         gardenerPriorities.addNode(gardenerDodge);
@@ -114,6 +109,17 @@ public strictfp class RobotPlayer {
         gardenerPriorities.addNode(new RandomMoveBehavior());
 
         return gardenerPriorities;
+    }
+
+    private static Node createLumberjackBehaviors() {
+        PrioritySelector lumberjackPriorities = new PrioritySelector();
+        PredicateSelector meleeSelector = new PredicateSelector();
+        meleeSelector.addPredicate(new EnemyInRangePredicate());
+        meleeSelector.addNode(new MeleeAttackBehavior());
+        lumberjackPriorities.addNode(meleeSelector);
+        lumberjackPriorities.addNode(new ClearCutBehavior());
+        lumberjackPriorities.addNode(new RandomMoveBehavior());
+        return lumberjackPriorities;
     }
 
     private static Node createScoutBehaviors() {
