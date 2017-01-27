@@ -3,8 +3,7 @@ package rolygon.ai;
 import battlecode.common.*;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
-import ddg.ai.Node;
-import ddg.util.RandomDirection;
+import ddg.util.Randomizer;
 
 /**
  * Created by nobody on 1/16/2017.
@@ -14,7 +13,7 @@ public class ManageForestBehavior implements Behavior {
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         // plant a tree
         if (rc.getRoundNum() % 50 == 0) {
-            Direction dir = RandomDirection.getDirection();
+            Direction dir = Randomizer.getRandomDirection();
             for (int i = 0; i < 10; i++) {
                 if (rc.canPlantTree(dir)) {
                     rc.plantTree(dir);

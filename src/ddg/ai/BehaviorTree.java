@@ -14,6 +14,10 @@ public class BehaviorTree {
         this.root = rootNode;
     }
 
+    public void addMemory(String key, Object value) {
+        context.memorize(key, value);
+    }
+
     public void run(RobotController rc) throws GameActionException {
         root.run(rc, context);
     }

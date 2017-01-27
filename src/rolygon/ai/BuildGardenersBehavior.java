@@ -6,7 +6,7 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
-import ddg.util.RandomDirection;
+import ddg.util.Randomizer;
 
 /**
  * Created by nobody on 1/14/2017.
@@ -22,7 +22,7 @@ public class BuildGardenersBehavior implements Behavior {
         if (numGardeners >= MAX_GARDENERS) {
             return RunResult.SKIPPED;
         }
-        Direction dir = RandomDirection.getDirection();
+        Direction dir = Randomizer.getRandomDirection();
         if (rc.canBuildRobot(RobotType.GARDENER, dir)) {
             rc.buildRobot(RobotType.GARDENER, dir);
             numGardeners++;

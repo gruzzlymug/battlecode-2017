@@ -39,7 +39,10 @@ public strictfp class RobotPlayer {
                 break;
             case SOLDIER:
                 Node soldierBehaviors = createSoldierBehaviors();
-                runSoldier(new BehaviorTree(soldierBehaviors));
+                BehaviorTree soldierTree = new BehaviorTree(soldierBehaviors);
+                MapLocation[] enemyArchonLocations = rc.getInitialArchonLocations(enemyTeam);
+                soldierTree.addMemory("enemy_archon_locations", enemyArchonLocations);
+                runSoldier(soldierTree);
                 break;
             case TANK:
                 break;
