@@ -76,11 +76,10 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.LUMBERJACK,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.LUMBERJACK,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.LUMBERJACK,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.LUMBERJACK,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
@@ -114,6 +113,10 @@ public strictfp class RobotPlayer {
 
     private static Node createLumberjackBehaviors() {
         PrioritySelector lumberjackPriorities = new PrioritySelector();
+        PredicateSelector meleeSelector = new PredicateSelector();
+        meleeSelector.addPredicate(new EnemyInRangePredicate());
+        meleeSelector.addNode(new MeleeAttackBehavior());
+        lumberjackPriorities.addNode(meleeSelector);
         lumberjackPriorities.addNode(new ClearCutBehavior());
         lumberjackPriorities.addNode(new RandomMoveBehavior());
         return lumberjackPriorities;
