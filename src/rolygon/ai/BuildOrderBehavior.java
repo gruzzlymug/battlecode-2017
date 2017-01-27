@@ -6,10 +6,14 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
-import ddg.util.RandomDirection;
+import ddg.util.Randomizer;
 
 /**
  * Created by nobody on 1/14/2017.
+ *
+ * Create API to configure behavior.
+ * Create piece-wise functions for builds. Allow simple scripting:
+ * loops, conditionals (e.g. if enemy forces are X, build Y), etc.
  */
 public class BuildOrderBehavior implements Behavior {
     RobotType[] buildOrder;
@@ -21,7 +25,7 @@ public class BuildOrderBehavior implements Behavior {
             return RunResult.SKIPPED;
         }
         // TODO improve test and selection of direction
-        Direction dir = RandomDirection.getDirection();
+        Direction dir = Randomizer.getRandomDirection();
         RobotType nextRobot = buildOrder[currentRobot];
         if (nextRobot == null) {
             // plant a tree
