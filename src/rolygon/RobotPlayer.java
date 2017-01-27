@@ -18,15 +18,6 @@ public strictfp class RobotPlayer {
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
 
-        RobotType[] buildOrder = {
-            RobotType.SOLDIER, RobotType.SCOUT, RobotType.LUMBERJACK,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        };
-
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
