@@ -12,26 +12,7 @@ import ddg.util.RandomDirection;
  * Created by nobody on 1/14/2017.
  */
 public class BuildOrderBehavior implements Behavior {
-    RobotType[] buildOrder = {
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-        RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-    };
+    RobotType[] buildOrder;
     int currentRobot;
 
     @Override
