@@ -42,7 +42,7 @@ public strictfp class RobotPlayer {
                 Node soldierBehaviors = createSoldierBehaviors();
                 BehaviorTree soldierTree = new BehaviorTree(soldierBehaviors);
                 MapLocation[] enemyArchonLocations = rc.getInitialArchonLocations(enemyTeam);
-                soldierTree.addMemory("enemy_archon_locations", enemyArchonLocations);
+                soldierTree.addMemory(Key.ENEMY_ARCHON_LOCATIONS, enemyArchonLocations);
                 runSoldier(soldierTree);
                 break;
             case TANK:
@@ -52,7 +52,7 @@ public strictfp class RobotPlayer {
         }
     }
 
-    private static Node createArchonBehaviors(RobotController rc) {
+    private static Node createArchonBehaviors(RobotController rc) throws GameActionException {
         PredicateSelector archonDodge = new PredicateSelector();
         archonDodge.addPredicate(new UnderFirePredicate());
         archonDodge.addNode(new DodgeBulletBehavior());
@@ -80,7 +80,7 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SCOUT, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
@@ -128,7 +128,8 @@ public strictfp class RobotPlayer {
 
     private static Node createScoutBehaviors() {
         Sequence movement = new Sequence();
-        Behavior seekCorner = new SeekCornerBehavior();
+        SeekCornerBehavior seekCorner = new SeekCornerBehavior();
+        seekCorner.initialize(rc);
         movement.addNode(seekCorner);
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
