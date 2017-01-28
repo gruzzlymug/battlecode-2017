@@ -46,6 +46,8 @@ public strictfp class RobotPlayer {
                 runSoldier(soldierTree);
                 break;
             case TANK:
+                Node tankBehaviors = createTankBehaviors();
+                runTank(new BehaviorTree(tankBehaviors));
                 break;
         }
     }
@@ -151,6 +153,17 @@ public strictfp class RobotPlayer {
         return soldierPriorities;
     }
 
+    private static Node createTankBehaviors() {
+        PredicateSelector tankAttack = new PredicateSelector();
+        tankAttack.addPredicate(new EnemyInRangePredicate());
+        Sequence attackSequence = new Sequence();
+        attackSequence.addNode(new RandomMoveBehavior());
+        attackSequence.addNode(new RangedAttackBehavior());
+        tankAttack.addNode(attackSequence);
+
+        return tankAttack;
+    }
+
     private static void runArchon(BehaviorTree archonTree) throws GameActionException {
         while (true) {
             common(rc);
@@ -161,6 +174,8 @@ public strictfp class RobotPlayer {
 
     private static void runGardener(BehaviorTree gardenerTree) throws GameActionException  {
         while (true) {
+            final int CHANNEL_GARDENER_SUM = 20;
+            rc.broadcast(CHANNEL_GARDENER_SUM, 1+rc.readBroadcast(CHANNEL_GARDENER_SUM));
             common(rc);
             gardenerTree.run(rc);
             Clock.yield();

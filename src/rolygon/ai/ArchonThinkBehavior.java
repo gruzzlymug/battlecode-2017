@@ -10,6 +10,7 @@ import ddg.ai.Keys;
  * Created by nobody on 1/16/2017.
  */
 public class ArchonThinkBehavior implements Behavior {
+    final private static int CHANNEL_GARDENER_SUM = 20;
     final private static int CHANNEL_LUMBERJACK_SUM = 21;
     final private static int CHANNEL_SCOUT_SUM = 22;
     final private static int CHANNEL_SOLDIER_SUM = 23;
@@ -27,10 +28,12 @@ public class ArchonThinkBehavior implements Behavior {
     }
 
     private void countArmy(RobotController rc, Context context) throws GameActionException {
+        int numGardeners = countUnits(rc, CHANNEL_GARDENER_SUM);
         int numLumberjacks = countUnits(rc, CHANNEL_LUMBERJACK_SUM);
         int numScouts = countUnits(rc, CHANNEL_SCOUT_SUM);
         int numSoldiers = countUnits(rc, CHANNEL_SOLDIER_SUM);
 
+        context.memorize(Keys.NUM_GARDENERS, numGardeners);
         context.memorize(Keys.NUM_LUMBERJACKS, numLumberjacks);
         context.memorize(Keys.NUM_SCOUTS, numScouts);
         context.memorize(Keys.NUM_SOLDIERS, numSoldiers);
