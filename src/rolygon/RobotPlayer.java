@@ -70,9 +70,7 @@ public strictfp class RobotPlayer {
 
         // perform standard think and then run priorities
         Sequence archonSequence = new Sequence();
-        ArchonThinkBehavior brain = new ArchonThinkBehavior();
-        brain.initialize(rc);
-        archonSequence.addNode(brain);
+        archonSequence.addNode(new ArchonThinkBehavior(rc));
         archonSequence.addNode(archonPriorities);
 
         return archonSequence;
@@ -128,9 +126,7 @@ public strictfp class RobotPlayer {
 
     private static Node createScoutBehaviors() {
         Sequence movement = new Sequence();
-        SeekCornerBehavior seekCorner = new SeekCornerBehavior();
-        seekCorner.initialize(rc);
-        movement.addNode(seekCorner);
+        movement.addNode(new SeekCornerBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
         return movement;

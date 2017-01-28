@@ -29,8 +29,11 @@ public class ArchonThinkBehavior implements Behavior {
     private MapLocation bottomLeft;
     private MapLocation topRight;
 
-    // TODO consider adding to interface
-    public void initialize(RobotController rc) throws GameActionException {
+    private ArchonThinkBehavior() {
+        // prevent default construction
+    }
+
+    public ArchonThinkBehavior(RobotController rc) throws GameActionException {
         MapLocation[] friendlyArchonLocations = rc.getInitialArchonLocations(rc.getTeam());
         for (MapLocation loc : friendlyArchonLocations) {
             findExtents(loc);
