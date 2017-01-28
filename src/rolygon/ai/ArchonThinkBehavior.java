@@ -15,11 +15,6 @@ import rolygon.ai.comm.Value;
  * GameConstants.BROADCAST_MAX_CHANNELS = 10,000
  */
 public class ArchonThinkBehavior implements Behavior {
-    final private static int CHANNEL_GARDENER_SUM = 20;
-    final private static int CHANNEL_LUMBERJACK_SUM = 21;
-    final private static int CHANNEL_SCOUT_SUM = 22;
-    final private static int CHANNEL_SOLDIER_SUM = 23;
-
     private static float mapLeft = 500;
     private static float mapTop = 0;
     private static float mapRight = 0;
@@ -100,10 +95,10 @@ public class ArchonThinkBehavior implements Behavior {
     }
 
     private void countArmy(RobotController rc, Context context) throws GameActionException {
-        int numGardeners = countUnits(rc, CHANNEL_GARDENER_SUM);
-        int numLumberjacks = countUnits(rc, CHANNEL_LUMBERJACK_SUM);
-        int numScouts = countUnits(rc, CHANNEL_SCOUT_SUM);
-        int numSoldiers = countUnits(rc, CHANNEL_SOLDIER_SUM);
+        int numGardeners = countUnits(rc, Channel.GARDENER_SUM);
+        int numLumberjacks = countUnits(rc, Channel.LUMBERJACK_SUM);
+        int numScouts = countUnits(rc, Channel.SCOUT_SUM);
+        int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
 
         context.memorize(Key.NUM_GARDENERS, numGardeners);
         context.memorize(Key.NUM_LUMBERJACKS, numLumberjacks);

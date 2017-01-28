@@ -3,6 +3,7 @@ package rolygon;
 import battlecode.common.*;
 import ddg.ai.*;
 import rolygon.ai.*;
+import rolygon.ai.comm.Channel;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
@@ -173,8 +174,7 @@ public strictfp class RobotPlayer {
 
     private static void runGardener(BehaviorTree gardenerTree) throws GameActionException  {
         while (true) {
-            final int CHANNEL_GARDENER_SUM = 20;
-            rc.broadcast(CHANNEL_GARDENER_SUM, 1+rc.readBroadcast(CHANNEL_GARDENER_SUM));
+            rc.broadcast(Channel.GARDENER_SUM, 1+rc.readBroadcast(Channel.GARDENER_SUM));
             common(rc);
             gardenerTree.run(rc);
             Clock.yield();
@@ -183,8 +183,7 @@ public strictfp class RobotPlayer {
 
     static void runLumberjack(BehaviorTree lumberjackTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_LUMBERJACK_SUM = 21;
-            rc.broadcast(CHANNEL_LUMBERJACK_SUM, 1+rc.readBroadcast(CHANNEL_LUMBERJACK_SUM));
+            rc.broadcast(Channel.LUMBERJACK_SUM, 1+rc.readBroadcast(Channel.LUMBERJACK_SUM));
             common(rc);
             lumberjackTree.run(rc);
             Clock.yield();
@@ -193,8 +192,7 @@ public strictfp class RobotPlayer {
 
     static void runScout(BehaviorTree scoutTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_SCOUT_SUM = 22;
-            rc.broadcast(CHANNEL_SCOUT_SUM, 1+rc.readBroadcast(CHANNEL_SCOUT_SUM));
+            rc.broadcast(Channel.SCOUT_SUM, 1+rc.readBroadcast(Channel.SCOUT_SUM));
             common(rc);
             scoutTree.run(rc);
             Clock.yield();
@@ -203,8 +201,7 @@ public strictfp class RobotPlayer {
 
     static void runSoldier(BehaviorTree soldierTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_SOLDIER_SUM = 23;
-            rc.broadcast(CHANNEL_SOLDIER_SUM, 1+rc.readBroadcast(CHANNEL_SOLDIER_SUM));
+            rc.broadcast(Channel.SOLDIER_SUM, 1+rc.readBroadcast(Channel.SOLDIER_SUM));
             common(rc);
             soldierTree.run(rc);
             Clock.yield();
