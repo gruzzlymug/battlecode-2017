@@ -22,7 +22,7 @@ public strictfp class RobotPlayer {
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
-                Node archonBehaviors = createArchonBehaviors();
+                Node archonBehaviors = createArchonBehaviors(rc);
                 runArchon(new BehaviorTree(archonBehaviors));
                 break;
             case GARDENER:
@@ -52,7 +52,7 @@ public strictfp class RobotPlayer {
         }
     }
 
-    private static Node createArchonBehaviors() {
+    private static Node createArchonBehaviors(RobotController rc) {
         PredicateSelector archonDodge = new PredicateSelector();
         archonDodge.addPredicate(new UnderFirePredicate());
         archonDodge.addNode(new DodgeBulletBehavior());
@@ -70,7 +70,9 @@ public strictfp class RobotPlayer {
 
         // perform standard think and then run priorities
         Sequence archonSequence = new Sequence();
-        archonSequence.addNode(new ArchonThinkBehavior());
+        ArchonThinkBehavior brain = new ArchonThinkBehavior();
+        brain.initialize(rc);
+        archonSequence.addNode(brain);
         archonSequence.addNode(archonPriorities);
 
         return archonSequence;
