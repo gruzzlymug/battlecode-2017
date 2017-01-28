@@ -169,6 +169,8 @@ public strictfp class RobotPlayer {
 
     static void runLumberjack(BehaviorTree lumberjackTree) throws GameActionException {
         while (true) {
+            final int CHANNEL_LUMBERJACK_SUM = 21;
+            rc.broadcast(CHANNEL_LUMBERJACK_SUM, 1+rc.readBroadcast(CHANNEL_LUMBERJACK_SUM));
             common(rc);
             lumberjackTree.run(rc);
             Clock.yield();
@@ -177,6 +179,8 @@ public strictfp class RobotPlayer {
 
     static void runScout(BehaviorTree scoutTree) throws GameActionException {
         while (true) {
+            final int CHANNEL_SCOUT_SUM = 22;
+            rc.broadcast(CHANNEL_SCOUT_SUM, 1+rc.readBroadcast(CHANNEL_SCOUT_SUM));
             common(rc);
             scoutTree.run(rc);
             Clock.yield();
@@ -185,6 +189,8 @@ public strictfp class RobotPlayer {
 
     static void runSoldier(BehaviorTree soldierTree) throws GameActionException {
         while (true) {
+            final int CHANNEL_SOLDIER_SUM = 23;
+            rc.broadcast(CHANNEL_SOLDIER_SUM, 1+rc.readBroadcast(CHANNEL_SOLDIER_SUM));
             common(rc);
             soldierTree.run(rc);
             Clock.yield();
