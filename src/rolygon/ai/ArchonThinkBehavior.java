@@ -52,14 +52,12 @@ public class ArchonThinkBehavior implements Behavior {
     private void findExtents(MapLocation loc) {
         if (loc.x < mapLeft) {
             mapLeft = loc.x;
-        }
-        if (loc.x > mapRight) {
+        } else if (loc.x > mapRight) {
             mapRight = loc.x;
         }
         if (loc.y > mapTop) {
             mapTop = loc.y;
-        }
-        if (loc.y < mapBottom) {
+        } else if (loc.y < mapBottom) {
             mapBottom = loc.y;
         }
     }
@@ -76,17 +74,17 @@ public class ArchonThinkBehavior implements Behavior {
             rc.broadcast(Channel.MAP_EXT_CHANGED, Value.FALSE);
         }
 
-        MapLocation[] broadcasters = rc.senseBroadcastingRobotLocations();
+//        MapLocation[] broadcasters = rc.senseBroadcastingRobotLocations();
 //        System.out.println("--[ " + rc.getRoundNum() + " ]-----------------");
-        for (MapLocation broadcastLocation : broadcasters) {
+//        for (MapLocation broadcastLocation : broadcasters) {
 //            System.out.println(broadcastLocation.x + ", " + broadcastLocation.y);
-        }
+//        }
 
-        rc.setIndicatorDot(topRight, 128, 128, 128);
-        rc.setIndicatorDot(bottomLeft, 128, 128, 128);
-
-        rc.senseNearbyTrees();
-        rc.senseNearbyRobots();
+//        rc.setIndicatorDot(topRight, 128, 128, 128);
+//        rc.setIndicatorDot(bottomLeft, 128, 128, 128);
+//
+//        rc.senseNearbyTrees();
+//        rc.senseNearbyRobots();
 
         countArmy(rc, context);
         manageBullets(rc);
@@ -103,37 +101,38 @@ public class ArchonThinkBehavior implements Behavior {
             float width = mapRight - mapLeft;
             float height = mapTop - mapBottom;
 
-//            System.out.println();
+            float w10 = width / 10;
+            float h10 = height / 10;
+
             for (int row = 0; row < 10; row++) {
                 for (int col = 0; col < 10; col++) {
-//                    int channel = Channel.INFLUENCE_MAP + (9 - row) * 10 + col;
                     int channel = Channel.INFLUENCE_MAP + row * 10 + col;
                     int value = rc.readBroadcast(channel);
-//                    System.out.print(value + " ");
-                    float newX = mapLeft + col * width / 10 + (width / 20);
-                    float newY = mapBottom + row * height / 10 + (height / 20);
-                    MapLocation dot = new MapLocation(newX, newY);
-//                    System.out.println("--- " + dot);
-                    int shade = 128;
-                    if (value > 0) {
-                        shade = Math.max(255, 128 + value * 16);
-                    } else if (value < 0) {
-                        shade = Math.min(0, 128 - value * 16);
+                    if (value == 0) {
+                        continue;
+                    }
+                    //int shade = 128;
+                    if (value < 0) {
+                        //shade = Math.min(0, 128 - value * 16);
                         if (value < worstScore) {
                             worstScore = value;
-                            attackTarget = dot;
+//                            float newX = mapLeft + col * w10;// + (width / 20);
+//                            float newY = mapBottom + row * h10;// + (height / 20);
+//                            MapLocation dot = new MapLocation(newX, newY);
+//                            //rc.setIndicatorDot(dot, shade, shade, shade);
+//                            attackTarget = dot;
                         }
+//                    } else if (value < 0) {
+//                        shade = Math.max(255, 128 + value * 16);
                     }
-                    rc.setIndicatorDot(dot, shade, shade, shade);
                     rc.broadcast(channel, 0);
                 }
-//                System.out.println();
             }
 
-            if (attackTarget != null) {
-                int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
-                rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
-            }
+//            if (attackTarget != null) {
+//                int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
+//                rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
+//            }
         }
 
         return RunResult.SKIPPED;
@@ -144,6 +143,8 @@ public class ArchonThinkBehavior implements Behavior {
         int numLumberjacks = countUnits(rc, Channel.LUMBERJACK_SUM);
         int numScouts = countUnits(rc, Channel.SCOUT_SUM);
         int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
+
+        System.out.println(rc.getRoundNum() + " > G: " + numGardeners + ", L: " + numLumberjacks + ", S: " + numScouts + ", X: " + numSoldiers);
 
         rc.broadcast(Channel.GARDENER_COUNT, numGardeners);
         rc.broadcast(Channel.LUMBERJACK_COUNT, numLumberjacks);

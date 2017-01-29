@@ -63,6 +63,7 @@ public strictfp class RobotPlayer {
         archonAvoid.addNode(new AvoidEnemyBehavior());
 
         PrioritySelector archonPriorities = new PrioritySelector();
+        archonPriorities.addNode(new ArchonThinkBehavior(rc));
         archonPriorities.addNode(archonDodge);
         // TODO remove or fix before using. 644 rounds w/o it
         //archonPriorities.addNode(archonAvoid);
@@ -70,11 +71,11 @@ public strictfp class RobotPlayer {
         archonPriorities.addNode(new RandomMoveBehavior());
 
         // perform standard think and then run priorities
-        Sequence archonSequence = new Sequence();
-        archonSequence.addNode(new ArchonThinkBehavior(rc));
-        archonSequence.addNode(archonPriorities);
+//        Sequence archonSequence = new Sequence();
+//        archonSequence.addNode(new ArchonThinkBehavior(rc));
+//        archonSequence.addNode(archonPriorities);
 
-        return archonSequence;
+        return archonPriorities;
     }
 
     private static Node createGardenerBehaviors() {
