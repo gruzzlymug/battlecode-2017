@@ -1,5 +1,5 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: ; c-file-style: "linux" -*- */
-package fabian1.ringbuffer;
+package fabian1;
 
 public class RingBuffer< T >
 {
