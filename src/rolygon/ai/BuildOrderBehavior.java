@@ -7,7 +7,7 @@ import battlecode.common.RobotType;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
 import ddg.util.Randomizer;
-import rolygon.ai.comm.Channel;
+import ddg.comm.Channel;
 
 /**
  * Created by nobody on 1/14/2017.

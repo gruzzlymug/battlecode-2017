@@ -6,8 +6,8 @@ import battlecode.common.RobotController;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
 import ddg.ai.Key;
-import rolygon.ai.comm.Channel;
-import rolygon.ai.comm.Value;
+import ddg.comm.Channel;
+import ddg.comm.Value;
 
 /**
  * Created by nobody on 1/16/2017.

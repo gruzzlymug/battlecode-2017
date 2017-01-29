@@ -1,4 +1,4 @@
-package rolygon.ai.comm;
+package ddg.comm;
 
 /**
  * Created by nobody on 1/28/2017.

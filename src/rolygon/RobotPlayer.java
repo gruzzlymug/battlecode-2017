@@ -3,7 +3,7 @@ package rolygon;
 import battlecode.common.*;
 import ddg.ai.*;
 import rolygon.ai.*;
-import rolygon.ai.comm.Channel;
+import ddg.comm.Channel;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
