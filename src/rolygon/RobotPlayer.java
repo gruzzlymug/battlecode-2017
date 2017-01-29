@@ -152,12 +152,14 @@ public strictfp class RobotPlayer {
     private static Node createTankBehaviors() {
         PredicateSelector tankAttack = new PredicateSelector();
         tankAttack.addPredicate(new EnemyInRangePredicate());
-        Sequence attackSequence = new Sequence();
-        attackSequence.addNode(new RandomMoveBehavior());
-        attackSequence.addNode(new RangedAttackBehavior());
-        tankAttack.addNode(attackSequence);
+        tankAttack.addNode(new RangedAttackBehavior());
 
-        return tankAttack;
+        PrioritySelector tankPriorities = new PrioritySelector();
+        tankPriorities.addNode(tankAttack);
+        tankPriorities.addNode(new BugNavBehavior());
+        tankPriorities.addNode(new RandomMoveBehavior());
+
+        return tankPriorities;
     }
 
     private static void runArchon(BehaviorTree archonTree) throws GameActionException {
