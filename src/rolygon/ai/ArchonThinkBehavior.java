@@ -91,7 +91,7 @@ public class ArchonThinkBehavior implements Behavior {
         countArmy(rc, context);
         manageBullets(rc);
 
-        if ((int)context.recall(Key.NUM_SCOUTS) == 0) {
+        if ((int)context.recall(Key.NUM_SCOUTS) == 0 && rc.readBroadcast(Channel.ATTACK_TARGET) != 0) {
             rc.broadcast(Channel.ATTACK_TARGET, 0);
         }
 
