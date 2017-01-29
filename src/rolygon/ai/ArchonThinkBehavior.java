@@ -108,9 +108,9 @@ public class ArchonThinkBehavior implements Behavior {
                 for (int col = 0; col < 10; col++) {
                     int channel = Channel.INFLUENCE_MAP + row * 10 + col;
                     int value = rc.readBroadcast(channel);
-                    if (value == 0) {
-                        continue;
-                    }
+//                    if (value == 0) {
+//                        continue;
+//                    }
                     float newX = mapLeft + col * w10 + (width / 20);
                     float newY = mapBottom + row * h10 + (height / 20);
                     MapLocation dot = new MapLocation(newX, newY);
