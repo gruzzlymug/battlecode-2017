@@ -136,6 +136,7 @@ public strictfp class RobotPlayer {
         movement.addNode(moveScout);
 
         PrioritySelector scoutPriorities = new PrioritySelector();
+        scoutPriorities.addNode(new SenseEnvironmentBehavior());
         scoutPriorities.addNode(scoutDodge);
         scoutPriorities.addNode(movement);
 
