@@ -13,6 +13,12 @@ public class Context {
     }
 
     public Object recall(String key) {
+        Object thing = memory.get(key);
+//        System.out.println("R: " + key + ": " + thing);
         return memory.get(key);
+    }
+
+    public void forget(String key) {
+        memory.remove(key);
     }
 }

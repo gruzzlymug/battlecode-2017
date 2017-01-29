@@ -17,6 +17,9 @@ public class Channel {
     final public static int MAP_EXT_TOP = 102;
     final public static int MAP_EXT_RIGHT = 103;
 
+    // x * 1000 + y
+    final public static int ATTACK_TARGET = 200;
+
     // initial map will be 10x10 (channels 1000-1099)
     final public static int INFLUENCE_MAP = 1000;
     final public static int PROCESSED_IDS = 2000;

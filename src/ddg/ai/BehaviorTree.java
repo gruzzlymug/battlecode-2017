@@ -1,6 +1,7 @@
 package ddg.ai;
 
 import battlecode.common.*;
+import rolygon.ai.comm.Channel;
 
 /**
  * A Behavior Tree is ...
@@ -19,6 +20,17 @@ public class BehaviorTree {
     }
 
     public void run(RobotController rc) throws GameActionException {
+        // set up context
+        int packedAttack = rc.readBroadcast(Channel.ATTACK_TARGET);
+        if (packedAttack != 0) {
+            int y = packedAttack % 1000;
+            int x = (packedAttack - y) / 1000;
+            MapLocation attackTarget = new MapLocation(x, y);
+            context.memorize(Key.ATTACK_TARGET, attackTarget);
+        } else {
+            context.forget(Key.ATTACK_TARGET);
+        }
+        // run the behaviors
         root.run(rc, context);
     }
 }
