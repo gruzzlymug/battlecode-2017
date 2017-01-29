@@ -127,7 +127,7 @@ public strictfp class RobotPlayer {
 
     private static Node createScoutBehaviors() {
         Sequence movement = new Sequence();
-        movement.addNode(new SeekCornerBehavior(rc));
+        movement.addNode(new ScoutMapBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
         return movement;

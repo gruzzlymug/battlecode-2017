@@ -12,7 +12,7 @@ import java.awt.*;
 /**
  * Created by nobody on 1/11/2017.
  */
-public class SeekCornerBehavior implements Behavior {
+public class ScoutMapBehavior implements Behavior {
     static Direction[] goals = {
         new Direction((float)Math.PI / 2),
         new Direction(0),
@@ -26,11 +26,11 @@ public class SeekCornerBehavior implements Behavior {
     int numTries;
     boolean goingToOrigin;
 
-    private SeekCornerBehavior() {
+    private ScoutMapBehavior() {
         // prevent default construction
     }
 
-    public SeekCornerBehavior(RobotController rc) {
+    public ScoutMapBehavior(RobotController rc) {
         origin = rc.getLocation();
         offsetDeg = Randomizer.rollDie(30) * 12;
     }
@@ -38,16 +38,17 @@ public class SeekCornerBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         MapLocation robotLocation = rc.getLocation();
+        Direction toGoal;
         if (goingToOrigin) {
+            toGoal = robotLocation.directionTo(origin);
             if (numTries > 4) {
                 // can't make it back to origin, reset.
-                origin = rc.getLocation();
+                origin = robotLocation;
                 goingToOrigin = false;
                 offsetDeg = Randomizer.rollDie(30) * 12;
                 numTries = 0;
-            } else if (robotLocation.distanceTo(origin) > 3.0) {
-                // TODO arbitrary test
-                if (tryMove(rc, robotLocation.directionTo(origin), 30, 2)) {
+            } else if (robotLocation.distanceTo(origin) > 15.0) {
+                if (tryMove(rc, toGoal, 30, 2)) {
                     numTries = 0;
                 } else {
                     numTries++;
@@ -65,12 +66,21 @@ public class SeekCornerBehavior implements Behavior {
                     idxGoal %= goals.length;
                 }
             }
-            Direction toGoal = goals[idxGoal].rotateLeftDegrees(offsetDeg);
+            toGoal = goals[idxGoal].rotateLeftDegrees(offsetDeg);
             if (tryMove(rc, toGoal, 30, 2)) {
                 findExtents(rc);
                 numTries = 0;
             } else {
                 numTries++;
+            }
+        }
+
+        RobotInfo[] robots = rc.senseNearbyRobots( -1, rc.getTeam().opponent());
+        if (robots.length > 0) {
+            Direction toTarget = rc.getLocation().directionTo(robots[0].location);
+            boolean safeShot = Math.abs(toGoal.degreesBetween(toTarget)) > 30;
+            if (safeShot && rc.canFireSingleShot()) {
+                rc.fireSingleShot(toTarget);
             }
         }
 
