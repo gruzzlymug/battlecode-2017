@@ -32,17 +32,28 @@ public class SeekCornerBehavior implements Behavior {
 
     public SeekCornerBehavior(RobotController rc) {
         origin = rc.getLocation();
-        offsetDeg = Randomizer.rollDie(360);
+        offsetDeg = Randomizer.rollDie(30) * 12;
     }
 
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         MapLocation robotLocation = rc.getLocation();
         if (goingToOrigin) {
-            // TODO arbitrary test
-            if (robotLocation.distanceTo(origin) > 3.0) {
-                tryMove(rc, robotLocation.directionTo(origin), 45, 1);
+            if (numTries > 4) {
+                // can't make it back to origin, reset.
+                origin = rc.getLocation();
+                goingToOrigin = false;
+                offsetDeg = Randomizer.rollDie(30) * 12;
+                numTries = 0;
+            } else if (robotLocation.distanceTo(origin) > 3.0) {
+                // TODO arbitrary test
+                if (tryMove(rc, robotLocation.directionTo(origin), 30, 2)) {
+                    numTries = 0;
+                } else {
+                    numTries++;
+                }
             } else {
+                // made it back
                 goingToOrigin = false;
             }
         } else {
@@ -50,12 +61,12 @@ public class SeekCornerBehavior implements Behavior {
                 goingToOrigin = true;
                 idxGoal++;
                 if (idxGoal >= goals.length) {
-                    offsetDeg = Randomizer.rollDie(360);
+                    offsetDeg = Randomizer.rollDie(30) * 12;
                     idxGoal %= goals.length;
                 }
             }
             Direction toGoal = goals[idxGoal].rotateLeftDegrees(offsetDeg);
-            if (tryMove(rc, toGoal, 45, 1)) {
+            if (tryMove(rc, toGoal, 30, 2)) {
                 findExtents(rc);
                 numTries = 0;
             } else {
