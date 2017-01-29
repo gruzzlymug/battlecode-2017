@@ -20,6 +20,7 @@ public class BehaviorTree {
     }
 
     public void run(RobotController rc) throws GameActionException {
+//        int startBytecodes = Clock.getBytecodesLeft();
         // set up context
         int packedAttack = rc.readBroadcast(Channel.ATTACK_TARGET);
         if (packedAttack != 0) {
@@ -32,5 +33,7 @@ public class BehaviorTree {
         }
         // run the behaviors
         root.run(rc, context);
+//        int endBytecodes = Clock.getBytecodesLeft();
+//        System.out.println(rc.getType() + " used " + (startBytecodes - endBytecodes) + " bytecodes");
     }
 }
