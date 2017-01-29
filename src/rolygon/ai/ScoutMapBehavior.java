@@ -125,6 +125,9 @@ public class ScoutMapBehavior implements Behavior {
      * @throws GameActionException
      */
     static boolean tryMove(RobotController rc, Direction dir, float degreeOffset, int checksPerSide) throws GameActionException {
+        if (rc.hasMoved()) {
+            return false;
+        }
 
         // First, try intended direction
         if (rc.canMove(dir)) {

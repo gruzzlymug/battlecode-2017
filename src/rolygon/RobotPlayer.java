@@ -79,7 +79,7 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SCOUT, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SCOUT, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
@@ -97,14 +97,8 @@ public strictfp class RobotPlayer {
         gardenerDodge.addPredicate(new UnderFirePredicate());
         gardenerDodge.addNode(new DodgeBulletBehavior());
 
-        //PredicateSelector gardenerAvoid = new PredicateSelector();
-        //gardenerAvoid.addPredicate(new EnemyInRangePredicate());
-        //gardenerAvoid.addNode(new AvoidEnemyBehavior());
-
         PrioritySelector gardenerPriorities = new PrioritySelector();
         gardenerPriorities.addNode(gardenerDodge);
-        // TODO remove or fix before using. 644 rounds w/o it
-        //gardenerPriorities.addNode(gardenerAvoid);
         gardenerPriorities.addNode(new ManageForestBehavior());
         BuildOrderBehavior builder = new BuildOrderBehavior();
         builder.setBuildOrder(buildOrder);
