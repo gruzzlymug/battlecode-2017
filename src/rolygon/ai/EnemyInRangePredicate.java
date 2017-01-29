@@ -2,6 +2,7 @@ package rolygon.ai;
 
 import battlecode.common.*;
 import ddg.ai.Context;
+import ddg.ai.Key;
 import ddg.ai.Predicate;
 
 /**
@@ -20,7 +21,7 @@ public class EnemyInRangePredicate implements Predicate {
         Team enemy = rc.getTeam().opponent();
         RobotInfo[] robots = rc.senseNearbyRobots(-1, enemy);
         foundEnemies = robots.length > 0;
-        context.memorize("nearby_enemies", robots);
+        context.memorize(Key.NEARBY_ENEMIES, robots);
         return this;
     }
 

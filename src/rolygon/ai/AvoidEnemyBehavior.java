@@ -6,6 +6,7 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotInfo;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
+import ddg.ai.Key;
 
 /**
  * Created by nobody on 1/14/2017.
@@ -20,7 +21,7 @@ import ddg.ai.Context;
 public class AvoidEnemyBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        RobotInfo[] enemies = (RobotInfo[]) context.recall("nearby_enemies");
+        RobotInfo[] enemies = (RobotInfo[]) context.recall(Key.NEARBY_ENEMIES);
         if (enemies.length > 0) {
             Direction awayFromEnemy = enemies[0].getLocation().directionTo(rc.getLocation());
             if (rc.canMove(awayFromEnemy)) {

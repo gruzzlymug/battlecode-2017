@@ -67,10 +67,10 @@ public class ArchonThinkBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         if (rc.readBroadcast(Channel.MAP_EXT_CHANGED) == Value.TRUE) {
-            float mapLeft = rc.readBroadcast(Channel.MAP_EXT_LEFT);
-            float mapRight = rc.readBroadcast(Channel.MAP_EXT_RIGHT);
-            float mapTop = rc.readBroadcast(Channel.MAP_EXT_TOP);
-            float mapBottom = rc.readBroadcast(Channel.MAP_EXT_BOTTOM);
+            mapLeft = rc.readBroadcast(Channel.MAP_EXT_LEFT);
+            mapRight = rc.readBroadcast(Channel.MAP_EXT_RIGHT);
+            mapTop = rc.readBroadcast(Channel.MAP_EXT_TOP);
+            mapBottom = rc.readBroadcast(Channel.MAP_EXT_BOTTOM);
             topRight = new MapLocation(mapRight, mapTop);
             bottomLeft = new MapLocation(mapLeft, mapBottom);
             rc.broadcast(Channel.MAP_EXT_CHANGED, Value.FALSE);
@@ -90,6 +90,35 @@ public class ArchonThinkBehavior implements Behavior {
 
         countArmy(rc, context);
         manageBullets(rc);
+
+        // influence map
+        if (0 == 0) {
+            float width = mapRight - mapLeft;
+            float height = mapTop - mapBottom;
+
+//            System.out.println();
+            for (int row = 0; row < 10; row++) {
+                for (int col = 0; col < 10; col++) {
+//                    int channel = Channel.INFLUENCE_MAP + (9 - row) * 10 + col;
+                    int channel = Channel.INFLUENCE_MAP + row * 10 + col;
+                    int value = rc.readBroadcast(channel);
+//                    System.out.print(value + " ");
+                    float newX = mapLeft + col * width / 10 + (width / 20);
+                    float newY = mapBottom + row * height / 10 + (height / 20);
+                    MapLocation dot = new MapLocation(newX, newY);
+//                    System.out.println("--- " + dot);
+                    if (value > 0) {
+                        rc.setIndicatorDot(dot, 0, 64 + 16 * value, 0);
+                    } else if (value < 0) {
+                        rc.setIndicatorDot(dot, 64 + 16 * value, 0, 0);
+                    } else {
+                        rc.setIndicatorDot(dot, 128, 128, 128);
+                    }
+                    rc.broadcast(channel, 0);
+                }
+//                System.out.println();
+            }
+        }
 
         return RunResult.SKIPPED;
     }
