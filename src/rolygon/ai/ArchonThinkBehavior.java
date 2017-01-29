@@ -80,8 +80,8 @@ public class ArchonThinkBehavior implements Behavior {
 //            System.out.println(broadcastLocation.x + ", " + broadcastLocation.y);
 //        }
 
-//        rc.setIndicatorDot(topRight, 128, 128, 128);
-//        rc.setIndicatorDot(bottomLeft, 128, 128, 128);
+        rc.setIndicatorDot(topRight, 128, 128, 128);
+        rc.setIndicatorDot(bottomLeft, 128, 128, 128);
 //
 //        rc.senseNearbyTrees();
 //        rc.senseNearbyRobots();
@@ -111,28 +111,28 @@ public class ArchonThinkBehavior implements Behavior {
                     if (value == 0) {
                         continue;
                     }
-                    //int shade = 128;
+                    float newX = mapLeft + col * w10 + (width / 20);
+                    float newY = mapBottom + row * h10 + (height / 20);
+                    MapLocation dot = new MapLocation(newX, newY);
+                    int shade = 128;
                     if (value < 0) {
-                        //shade = Math.min(0, 128 - value * 16);
+                        shade = Math.min(0, 128 - value * 16);
                         if (value < worstScore) {
                             worstScore = value;
-//                            float newX = mapLeft + col * w10;// + (width / 20);
-//                            float newY = mapBottom + row * h10;// + (height / 20);
-//                            MapLocation dot = new MapLocation(newX, newY);
-//                            //rc.setIndicatorDot(dot, shade, shade, shade);
-//                            attackTarget = dot;
+                            attackTarget = dot;
                         }
-//                    } else if (value < 0) {
-//                        shade = Math.max(255, 128 + value * 16);
+                    } else if (value < 0) {
+                        shade = Math.max(255, 128 + value * 16);
                     }
+                    rc.setIndicatorDot(dot, shade, shade, shade);
                     rc.broadcast(channel, 0);
                 }
             }
 
-//            if (attackTarget != null) {
-//                int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
-//                rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
-//            }
+            if (attackTarget != null) {
+                int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
+                rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
+            }
         }
 
         return RunResult.SKIPPED;
@@ -144,7 +144,7 @@ public class ArchonThinkBehavior implements Behavior {
         int numScouts = countUnits(rc, Channel.SCOUT_SUM);
         int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
 
-        System.out.println(rc.getRoundNum() + " > G: " + numGardeners + ", L: " + numLumberjacks + ", S: " + numScouts + ", X: " + numSoldiers);
+//        System.out.println("G: " + numGardeners + ", L: " + numLumberjacks + ", S: " + numScouts + ", X: " + numSoldiers);
 
         rc.broadcast(Channel.GARDENER_COUNT, numGardeners);
         rc.broadcast(Channel.LUMBERJACK_COUNT, numLumberjacks);
