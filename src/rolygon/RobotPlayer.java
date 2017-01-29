@@ -126,11 +126,20 @@ public strictfp class RobotPlayer {
     }
 
     private static Node createScoutBehaviors() {
+        PredicateSelector scoutDodge = new PredicateSelector();
+        scoutDodge.addPredicate(new UnderFirePredicate());
+        scoutDodge.addNode(new DodgeBulletBehavior());
+
         Sequence movement = new Sequence();
         movement.addNode(new ScoutMapBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
-        return movement;
+
+        PrioritySelector scoutPriorities = new PrioritySelector();
+        scoutPriorities.addNode(scoutDodge);
+        scoutPriorities.addNode(movement);
+
+        return scoutPriorities;
     }
 
     private static Node createSoldierBehaviors() {
