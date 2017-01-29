@@ -82,8 +82,8 @@ public class ArchonThinkBehavior implements Behavior {
 //            System.out.println(broadcastLocation.x + ", " + broadcastLocation.y);
         }
 
-        rc.setIndicatorDot(topRight, 0, 0, 0);
-        rc.setIndicatorDot(bottomLeft, 255, 255, 255);
+        rc.setIndicatorDot(topRight, 128, 128, 128);
+        rc.setIndicatorDot(bottomLeft, 128, 128, 128);
 
         rc.senseNearbyTrees();
         rc.senseNearbyRobots();
@@ -114,20 +114,17 @@ public class ArchonThinkBehavior implements Behavior {
                     float newY = mapBottom + row * height / 10 + (height / 20);
                     MapLocation dot = new MapLocation(newX, newY);
 //                    System.out.println("--- " + dot);
+                    int shade = 128;
                     if (value > 0) {
-//                        rc.setIndicatorDot(dot, 0, 64 + 16 * value, 0);
-                        int shade = Math.max(256, 128 + value * 16);
-                        rc.setIndicatorDot(dot, shade, shade, shade);
+                        shade = Math.max(255, 128 + value * 16);
                     } else if (value < 0) {
-                        int shade = Math.min(0, 128 - value * 16);
-                        rc.setIndicatorDot(dot, shade, shade, shade);
+                        shade = Math.min(0, 128 - value * 16);
                         if (value < worstScore) {
                             worstScore = value;
                             attackTarget = dot;
                         }
-                    } else {
-                        rc.setIndicatorDot(dot, 128, 128, 128);
                     }
+                    rc.setIndicatorDot(dot, shade, shade, shade);
                     rc.broadcast(channel, 0);
                 }
 //                System.out.println();
