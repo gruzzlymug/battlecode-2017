@@ -6,10 +6,18 @@ package rolygon.ai.comm;
  * 10000 channels
  */
 public class Channel {
+    // for use when counting
     final public static int GARDENER_SUM = 20;
     final public static int LUMBERJACK_SUM = 21;
     final public static int SCOUT_SUM = 22;
     final public static int SOLDIER_SUM = 23;
+    final public static int TANK_SUM = 24;
+    // final values stored in these for use in logic
+    final public static int GARDENER_COUNT = 30;
+    final public static int LUMBERJACK_COUNT = 31;
+    final public static int SCOUT_COUNT = 32;
+    final public static int SOLDIER_COUNT = 33;
+    final public static int TANK_COUNT = 34;
 
     final public static int MAP_EXT_CHANGED = 99;
     final public static int MAP_EXT_BOTTOM = 100;

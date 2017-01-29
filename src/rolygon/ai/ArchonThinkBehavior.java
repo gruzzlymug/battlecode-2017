@@ -145,6 +145,12 @@ public class ArchonThinkBehavior implements Behavior {
         int numScouts = countUnits(rc, Channel.SCOUT_SUM);
         int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
 
+        rc.broadcast(Channel.GARDENER_COUNT, numGardeners);
+        rc.broadcast(Channel.LUMBERJACK_COUNT, numLumberjacks);
+        rc.broadcast(Channel.SCOUT_COUNT, numScouts);
+        rc.broadcast(Channel.SOLDIER_COUNT, numSoldiers);
+
+        // TODO this is pointless unless multiple behaviors need it, remove.
         context.memorize(Key.NUM_GARDENERS, numGardeners);
         context.memorize(Key.NUM_LUMBERJACKS, numLumberjacks);
         context.memorize(Key.NUM_SCOUTS, numScouts);
