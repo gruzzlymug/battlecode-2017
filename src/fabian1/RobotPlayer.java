@@ -3,8 +3,6 @@ package fabian1;
 
 import battlecode.common.*;
 
-import fabian1.*;
-
 public strictfp class RobotPlayer
 {
     static RobotController rc;

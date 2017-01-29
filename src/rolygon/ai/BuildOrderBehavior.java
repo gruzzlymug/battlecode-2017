@@ -27,18 +27,7 @@ public class BuildOrderBehavior implements Behavior {
         // TODO improve test and selection of direction
         Direction dir = Randomizer.getRandomDirection();
         RobotType nextRobot = buildOrder[currentRobot];
-        if (nextRobot == null) {
-            // plant a tree
-            for (int i = 0; i < 20; i++) {
-                if (rc.canPlantTree(dir)) {
-                    rc.plantTree(dir);
-                    currentRobot++;
-                    return RunResult.FINISHED;
-                } else {
-                    dir = dir.rotateLeftDegrees(10);
-                }
-            }
-        } else if (rc.canBuildRobot(nextRobot, dir)) {
+        if (rc.canBuildRobot(nextRobot, dir)) {
             rc.buildRobot(nextRobot, dir);
             currentRobot++;
             return RunResult.FINISHED;

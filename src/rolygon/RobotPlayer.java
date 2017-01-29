@@ -3,6 +3,7 @@ package rolygon;
 import battlecode.common.*;
 import ddg.ai.*;
 import rolygon.ai.*;
+import rolygon.ai.comm.Channel;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
@@ -22,7 +23,7 @@ public strictfp class RobotPlayer {
         RobotType rtype = rc.getType();
         switch (rtype) {
             case ARCHON:
-                Node archonBehaviors = createArchonBehaviors();
+                Node archonBehaviors = createArchonBehaviors(rc);
                 runArchon(new BehaviorTree(archonBehaviors));
                 break;
             case GARDENER:
@@ -42,15 +43,17 @@ public strictfp class RobotPlayer {
                 Node soldierBehaviors = createSoldierBehaviors();
                 BehaviorTree soldierTree = new BehaviorTree(soldierBehaviors);
                 MapLocation[] enemyArchonLocations = rc.getInitialArchonLocations(enemyTeam);
-                soldierTree.addMemory("enemy_archon_locations", enemyArchonLocations);
+                soldierTree.addMemory(Key.ENEMY_ARCHON_LOCATIONS, enemyArchonLocations);
                 runSoldier(soldierTree);
                 break;
             case TANK:
+                Node tankBehaviors = createTankBehaviors();
+                runTank(new BehaviorTree(tankBehaviors));
                 break;
         }
     }
 
-    private static Node createArchonBehaviors() {
+    private static Node createArchonBehaviors(RobotController rc) throws GameActionException {
         PredicateSelector archonDodge = new PredicateSelector();
         archonDodge.addPredicate(new UnderFirePredicate());
         archonDodge.addNode(new DodgeBulletBehavior());
@@ -68,7 +71,7 @@ public strictfp class RobotPlayer {
 
         // perform standard think and then run priorities
         Sequence archonSequence = new Sequence();
-        archonSequence.addNode(new ArchonThinkBehavior());
+        archonSequence.addNode(new ArchonThinkBehavior(rc));
         archonSequence.addNode(archonPriorities);
 
         return archonSequence;
@@ -76,7 +79,7 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
+            RobotType.SCOUT, RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
             RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
@@ -124,8 +127,7 @@ public strictfp class RobotPlayer {
 
     private static Node createScoutBehaviors() {
         Sequence movement = new Sequence();
-        Behavior seekCorner = new SeekCornerBehavior();
-        movement.addNode(seekCorner);
+        movement.addNode(new ScoutMapBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
         return movement;
@@ -151,6 +153,17 @@ public strictfp class RobotPlayer {
         return soldierPriorities;
     }
 
+    private static Node createTankBehaviors() {
+        PredicateSelector tankAttack = new PredicateSelector();
+        tankAttack.addPredicate(new EnemyInRangePredicate());
+        Sequence attackSequence = new Sequence();
+        attackSequence.addNode(new RandomMoveBehavior());
+        attackSequence.addNode(new RangedAttackBehavior());
+        tankAttack.addNode(attackSequence);
+
+        return tankAttack;
+    }
+
     private static void runArchon(BehaviorTree archonTree) throws GameActionException {
         while (true) {
             common(rc);
@@ -161,6 +174,7 @@ public strictfp class RobotPlayer {
 
     private static void runGardener(BehaviorTree gardenerTree) throws GameActionException  {
         while (true) {
+            rc.broadcast(Channel.GARDENER_SUM, 1+rc.readBroadcast(Channel.GARDENER_SUM));
             common(rc);
             gardenerTree.run(rc);
             Clock.yield();
@@ -169,8 +183,7 @@ public strictfp class RobotPlayer {
 
     static void runLumberjack(BehaviorTree lumberjackTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_LUMBERJACK_SUM = 21;
-            rc.broadcast(CHANNEL_LUMBERJACK_SUM, 1+rc.readBroadcast(CHANNEL_LUMBERJACK_SUM));
+            rc.broadcast(Channel.LUMBERJACK_SUM, 1+rc.readBroadcast(Channel.LUMBERJACK_SUM));
             common(rc);
             lumberjackTree.run(rc);
             Clock.yield();
@@ -179,8 +192,7 @@ public strictfp class RobotPlayer {
 
     static void runScout(BehaviorTree scoutTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_SCOUT_SUM = 22;
-            rc.broadcast(CHANNEL_SCOUT_SUM, 1+rc.readBroadcast(CHANNEL_SCOUT_SUM));
+            rc.broadcast(Channel.SCOUT_SUM, 1+rc.readBroadcast(Channel.SCOUT_SUM));
             common(rc);
             scoutTree.run(rc);
             Clock.yield();
@@ -189,8 +201,7 @@ public strictfp class RobotPlayer {
 
     static void runSoldier(BehaviorTree soldierTree) throws GameActionException {
         while (true) {
-            final int CHANNEL_SOLDIER_SUM = 23;
-            rc.broadcast(CHANNEL_SOLDIER_SUM, 1+rc.readBroadcast(CHANNEL_SOLDIER_SUM));
+            rc.broadcast(Channel.SOLDIER_SUM, 1+rc.readBroadcast(Channel.SOLDIER_SUM));
             common(rc);
             soldierTree.run(rc);
             Clock.yield();
