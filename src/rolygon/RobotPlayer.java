@@ -80,19 +80,9 @@ public strictfp class RobotPlayer {
 
     private static Node createGardenerBehaviors() {
         RobotType[] buildOrder = {
-            RobotType.SCOUT, RobotType.LUMBERJACK, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.LUMBERJACK, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
-            RobotType.SOLDIER, RobotType.SOLDIER, RobotType.SOLDIER,
+            RobotType.SCOUT, RobotType.LUMBERJACK, RobotType.SOLDIER, //RobotType.TANK,
         };
+        int[] buildTarget = { 2, 10, 20 };
 
         PredicateSelector gardenerDodge = new PredicateSelector();
         gardenerDodge.addPredicate(new UnderFirePredicate());
@@ -102,7 +92,7 @@ public strictfp class RobotPlayer {
         gardenerPriorities.addNode(gardenerDodge);
         gardenerPriorities.addNode(new ManageForestBehavior());
         BuildOrderBehavior builder = new BuildOrderBehavior();
-        builder.setBuildOrder(buildOrder);
+        builder.setBuildConfig(buildOrder, buildTarget);
         gardenerPriorities.addNode(builder);
         gardenerPriorities.addNode(new RandomMoveBehavior());
 
@@ -216,6 +206,7 @@ public strictfp class RobotPlayer {
 
     static void runTank(BehaviorTree tankTree) throws GameActionException {
         while (true) {
+            rc.broadcast(Channel.TANK_SUM, 1+rc.readBroadcast(Channel.TANK_SUM));
             common(rc);
             tankTree.run(rc);
             Clock.yield();
