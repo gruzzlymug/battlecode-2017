@@ -91,8 +91,15 @@ public class ArchonThinkBehavior implements Behavior {
         countArmy(rc, context);
         manageBullets(rc);
 
+        if ((int)context.recall(Key.NUM_SCOUTS) == 0) {
+            rc.broadcast(Channel.ATTACK_TARGET, 0);
+        }
+
         // influence map
         if (0 == 0) {
+            MapLocation attackTarget = null;
+            int worstScore = 0;
+
             float width = mapRight - mapLeft;
             float height = mapTop - mapBottom;
 
@@ -108,15 +115,27 @@ public class ArchonThinkBehavior implements Behavior {
                     MapLocation dot = new MapLocation(newX, newY);
 //                    System.out.println("--- " + dot);
                     if (value > 0) {
-                        rc.setIndicatorDot(dot, 0, 64 + 16 * value, 0);
+//                        rc.setIndicatorDot(dot, 0, 64 + 16 * value, 0);
+                        int shade = Math.max(256, 128 + value * 16);
+                        rc.setIndicatorDot(dot, shade, shade, shade);
                     } else if (value < 0) {
-                        rc.setIndicatorDot(dot, 64 + 16 * value, 0, 0);
+                        int shade = Math.min(0, 128 - value * 16);
+                        rc.setIndicatorDot(dot, shade, shade, shade);
+                        if (value < worstScore) {
+                            worstScore = value;
+                            attackTarget = dot;
+                        }
                     } else {
                         rc.setIndicatorDot(dot, 128, 128, 128);
                     }
                     rc.broadcast(channel, 0);
                 }
 //                System.out.println();
+            }
+
+            if (attackTarget != null) {
+                int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
+                rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
             }
         }
 

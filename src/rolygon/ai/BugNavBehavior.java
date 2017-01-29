@@ -6,6 +6,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
+import ddg.ai.Key;
 import ddg.ai.Node;
 
 /**
@@ -17,10 +18,9 @@ import ddg.ai.Node;
  * Tree will route events (such as 'Set Goal') along with 'hash' of params.
  */
 public class BugNavBehavior implements Behavior {
-    private MapLocation goal;
-
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
+        MapLocation goal = (MapLocation)context.recall(Key.ATTACK_TARGET);
         if (goal == null) {
             return RunResult.SKIPPED;
         }
@@ -29,18 +29,17 @@ public class BugNavBehavior implements Behavior {
         Direction toGoal = robotLocation.directionTo(goal);
         if (rc.canMove(toGoal)) {
             rc.move(toGoal);
+            return RunResult.IN_PROGRESS;
         } else {
             // try to move left
             for (int i = 0; i < 8; i++) {
-                toGoal.rotateLeftDegrees(45);
+                toGoal = toGoal.rotateLeftDegrees(45);
+                if (rc.canMove(toGoal)) {
+                    rc.move(toGoal);
+                    return RunResult.IN_PROGRESS;
+                }
             }
         }
-        return RunResult.IN_PROGRESS;
-    }
-
-    // public for now, but this should be private? and handled through generic interface
-    // via pub-sub with tree.
-    public void setGoal(MapLocation goal) {
-        this.goal = goal;
+        return RunResult.SKIPPED;
     }
 }

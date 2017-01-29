@@ -21,8 +21,8 @@ public class MeleeAttackBehavior implements Behavior {
             if (rc.canMove(toGoal) && !rc.hasMoved()) {
                 rc.move(toGoal);
             }
-            if (rc.canChop(goal)) {
-                rc.chop(goal);
+            if (rc.canStrike()) {
+                rc.strike();
             }
         }
 

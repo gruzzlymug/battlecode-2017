@@ -152,6 +152,7 @@ public strictfp class RobotPlayer {
         PrioritySelector soldierPriorities = new PrioritySelector();
         soldierPriorities.addNode(soldierDodge);
         soldierPriorities.addNode(soldierAttack);
+        soldierPriorities.addNode(new BugNavBehavior());
         soldierPriorities.addNode(new RandomMoveBehavior());
 
         return soldierPriorities;
