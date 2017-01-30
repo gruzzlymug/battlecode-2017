@@ -45,7 +45,7 @@ public class BuildOrderBehavior implements Behavior {
                     break;
             }
             if (desired > have) {
-                System.out.println("Have " + have + " " + nextRobot + "s, want " + desired);
+                //System.out.println("Have " + have + " " + nextRobot + "s, want " + desired);
                 Direction dir = Randomizer.getRandomDirection();
                 for (int i = 0; i < 12; i++) {
                     if (rc.canBuildRobot(nextRobot, dir)) {

@@ -121,7 +121,7 @@ public class ArchonThinkBehavior implements Behavior {
                             worstScore = value;
                             attackTarget = dot;
                         }
-                    } else if (value < 0) {
+                    } else if (value > 0) {
                         shade = Math.max(255, 128 + value * 16);
                     }
                     rc.setIndicatorDot(dot, shade, shade, shade);
