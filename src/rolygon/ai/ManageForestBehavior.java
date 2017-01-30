@@ -12,14 +12,15 @@ public class ManageForestBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         // plant a tree
-        if (rc.getRoundNum() % 40 == 0) {
+        int roundNum = rc.getRoundNum();
+        if (roundNum > 79 && roundNum % 40 == 0) {
             Direction dir = Randomizer.getRandomDirection();
             for (int i = 0; i < 10; i++) {
                 if (rc.canPlantTree(dir)) {
                     rc.plantTree(dir);
                     return RunResult.FINISHED;
                 } else {
-                    dir = dir.rotateLeftDegrees(23);
+                    dir = dir.rotateLeftDegrees(45);
                 }
             }
         }

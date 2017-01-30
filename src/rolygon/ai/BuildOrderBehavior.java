@@ -45,16 +45,19 @@ public class BuildOrderBehavior implements Behavior {
                     break;
             }
             if (desired > have) {
-                //System.out.println("Have " + have + " " + nextRobot + "s, want " + desired);
-                Direction dir = Randomizer.getRandomDirection();
-                for (int i = 0; i < 12; i++) {
+                System.out.println("Have " + have + " " + nextRobot + "s, want " + desired + " B: " + rc.getTeamBullets());
+//                Direction dir = Randomizer.getRandomDirection();
+                Direction dir = new Direction((float)Math.PI / 2);
+                for (int i = 0; i < 8; i++) {
                     if (rc.canBuildRobot(nextRobot, dir)) {
+                        System.out.println("built " + nextRobot);
                         rc.buildRobot(nextRobot, dir);
                         currentRobot++;
                         return RunResult.FINISHED;
                     }
-                    dir = dir.rotateLeftDegrees(i * 30);
+                    dir = dir.rotateLeftDegrees(i * 45);
                 }
+//                System.out.println("could not build " + nextRobot + " B: " + rc.getTeamBullets());
                 return RunResult.SKIPPED;
             } else {
                 currentRobot++;
