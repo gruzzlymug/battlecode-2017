@@ -3,7 +3,7 @@ package rolygon.ai;
 import battlecode.common.*;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
-import rolygon.ai.comm.Channel;
+import ddg.comm.Channel;
 
 /**
  * Created by nobody on 1/14/2017.

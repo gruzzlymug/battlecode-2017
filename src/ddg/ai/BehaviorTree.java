@@ -1,7 +1,7 @@
 package ddg.ai;
 
 import battlecode.common.*;
-import rolygon.ai.comm.Channel;
+import ddg.comm.Channel;
 
 /**
  * A Behavior Tree is ...
