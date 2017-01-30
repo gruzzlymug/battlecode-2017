@@ -1,10 +1,7 @@
 package rolygon.ai.env;
 
 import battlecode.common.*;
-import ddg.ai.Node;
 import ddg.comm.Channel;
-
-import java.awt.*;
 
 /**
  * Created by nobody on 1/16/2017.
@@ -23,9 +20,13 @@ public class InfluenceMap {
     protected static float width;
     protected static float height;
 
+    private static RobotController rc;
     private static Team opponent;
 
-    public static void readExtents(RobotController rc) throws GameActionException {
+    public static void setController(RobotController rc) throws GameActionException {
+        // this is saved for broadcasting
+        InfluenceMap.rc = rc;
+
         mapLeft = rc.readBroadcast(Channel.MAP_EXT_LEFT);
         mapRight = rc.readBroadcast(Channel.MAP_EXT_RIGHT);
         mapTop = rc.readBroadcast(Channel.MAP_EXT_TOP);
@@ -37,11 +38,15 @@ public class InfluenceMap {
         opponent = rc.getTeam().opponent();
     }
 
-    public static void addRobots(RobotController rc, RobotInfo[] robots) throws GameActionException {
+    public static void addRobots(RobotInfo[] robots) throws GameActionException {
         for (RobotInfo robot : robots) {
             int id = robot.getID();
-            RobotType type = robot.getType();
-            double health = robot.getHealth();
+            if (isKnown(id)) {
+                continue;
+            }
+
+//            RobotType type = robot.getType();
+//            double health = robot.getHealth();
             MapLocation location = robot.getLocation();
 
             float adjX = location.x - mapLeft;
@@ -56,17 +61,52 @@ public class InfluenceMap {
             int channel = Channel.INFLUENCE_MAP + idxRow * 10 + idxCol;
             int adder = (robot.getTeam() == opponent) ? -1 : 1;
             rc.broadcast(channel, adder+rc.readBroadcast(channel));
+
+            int numProcessed = rc.readBroadcast(Channel.PROCESSED_IDS) + 1;
+            rc.broadcast(Channel.PROCESSED_IDS, numProcessed);
+            rc.broadcast(Channel.PROCESSED_IDS + numProcessed, id);
         }
     }
 
-    public static void reset() {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+    private static boolean isKnown(int id) throws GameActionException {
+        int numIds = rc.readBroadcast(Channel.PROCESSED_IDS);
+        for (int i = 0; i < numIds; i++) {
+            int otherId = rc.readBroadcast(Channel.PROCESSED_IDS + i);
+            if (id == otherId) {
+                return true;
             }
         }
+        return false;
     }
 
-    public static float[][] getGrid() {
-        return null;
+    public static void reset() throws GameActionException {
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                int channel = Channel.INFLUENCE_MAP + row * 10 + col;
+                if (rc.readBroadcast(channel) != 0) {
+                    rc.broadcast(channel, 0);
+                }
+            }
+        }
+        rc.broadcast(Channel.PROCESSED_IDS, 0);
+    }
+
+    public static void debugDraw() throws GameActionException {
+        float w10 = width / 10;
+        float h10 = height / 10;
+        int perUnit = 128;
+
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                int channel = Channel.INFLUENCE_MAP + row * 10 + col;
+                int value = rc.readBroadcast(channel);
+                float newX = mapLeft + col * w10 + (width / 20);
+                float newY = mapBottom + row * h10 + (height / 20);
+                MapLocation dot = new MapLocation(newX, newY);
+                int shade = 128 + value * perUnit;
+                shade = Math.max(0, Math.min(255, shade));
+                rc.setIndicatorDot(dot, shade, shade, shade);
+            }
+        }
     }
 }

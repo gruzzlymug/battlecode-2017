@@ -11,10 +11,10 @@ import rolygon.ai.env.InfluenceMap;
 public class SenseEnvironmentBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        InfluenceMap.readExtents(rc);
+        InfluenceMap.setController(rc);
 
         RobotInfo[] nearbyRobots = rc.senseNearbyRobots();
-        InfluenceMap.addRobots(rc, nearbyRobots);
+        InfluenceMap.addRobots(nearbyRobots);
 
         return RunResult.SKIPPED;
     }

@@ -6,6 +6,7 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
+import ddg.comm.Channel;
 import ddg.util.Randomizer;
 
 /**
@@ -15,13 +16,20 @@ import ddg.util.Randomizer;
  */
 public class BuildGardenersBehavior implements Behavior {
     final int MAX_GARDENERS = 10;
-    int numGardeners;
 
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
+        int numGardeners = rc.readBroadcast(Channel.GARDENER_COUNT);
         if (numGardeners >= MAX_GARDENERS) {
             return RunResult.SKIPPED;
         }
+
+        // don't build gardeners too quickly
+        int currentRound = rc.getRoundNum();
+        if (currentRound < numGardeners * 200) {
+            return RunResult.SKIPPED;
+        }
+
         Direction dir = Randomizer.getRandomDirection();
         if (rc.canBuildRobot(RobotType.GARDENER, dir)) {
             rc.buildRobot(RobotType.GARDENER, dir);

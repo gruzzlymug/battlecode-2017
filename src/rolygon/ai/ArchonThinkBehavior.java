@@ -8,6 +8,7 @@ import ddg.ai.Context;
 import ddg.ai.Key;
 import ddg.comm.Channel;
 import ddg.comm.Value;
+import rolygon.ai.env.InfluenceMap;
 
 /**
  * Created by nobody on 1/16/2017.
@@ -94,6 +95,9 @@ public class ArchonThinkBehavior implements Behavior {
         }
 
         // influence map
+        InfluenceMap.setController(rc);
+        InfluenceMap.debugDraw();
+
         if (0 == 0) {
             MapLocation attackTarget = null;
             int worstScore = 0;
@@ -108,24 +112,14 @@ public class ArchonThinkBehavior implements Behavior {
                 for (int col = 0; col < 10; col++) {
                     int channel = Channel.INFLUENCE_MAP + row * 10 + col;
                     int value = rc.readBroadcast(channel);
-//                    if (value == 0) {
-//                        continue;
-//                    }
-                    float newX = mapLeft + col * w10 + (width / 20);
-                    float newY = mapBottom + row * h10 + (height / 20);
-                    MapLocation dot = new MapLocation(newX, newY);
-                    int shade = 128;
                     if (value < 0) {
-                        shade = Math.min(0, 128 - value * 16);
                         if (value < worstScore) {
                             worstScore = value;
-                            attackTarget = dot;
+                            float newX = mapLeft + col * w10 + (width / 20);
+                            float newY = mapBottom + row * h10 + (height / 20);
+                            attackTarget = new MapLocation(newX, newY);
                         }
-                    } else if (value > 0) {
-                        shade = Math.max(255, 128 + value * 16);
                     }
-                    rc.setIndicatorDot(dot, shade, shade, shade);
-                    rc.broadcast(channel, 0);
                 }
             }
 
@@ -134,6 +128,8 @@ public class ArchonThinkBehavior implements Behavior {
                 int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
                 rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
             }
+
+            InfluenceMap.reset();
         }
 
         return RunResult.SKIPPED;
@@ -145,7 +141,7 @@ public class ArchonThinkBehavior implements Behavior {
         int numScouts = countUnits(rc, Channel.SCOUT_SUM);
         int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
 
-        System.out.println("G:" + numGardeners + ", L:" + numLumberjacks + ", S:" + numScouts + ", X:" + numSoldiers);
+//        System.out.println("G:" + numGardeners + ", L:" + numLumberjacks + ", S:" + numScouts + ", X:" + numSoldiers);
 
         rc.broadcast(Channel.GARDENER_COUNT, numGardeners);
         rc.broadcast(Channel.LUMBERJACK_COUNT, numLumberjacks);
