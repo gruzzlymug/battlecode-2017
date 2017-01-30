@@ -130,6 +130,7 @@ public class ArchonThinkBehavior implements Behavior {
             }
 
             if (attackTarget != null) {
+                rc.setIndicatorDot(attackTarget, 255, 255, 0);
                 int packedAttack = 1000 * (int)attackTarget.x + (int)attackTarget.y;
                 rc.broadcast(Channel.ATTACK_TARGET, packedAttack);
             }
@@ -144,7 +145,7 @@ public class ArchonThinkBehavior implements Behavior {
         int numScouts = countUnits(rc, Channel.SCOUT_SUM);
         int numSoldiers = countUnits(rc, Channel.SOLDIER_SUM);
 
-//        System.out.println("G: " + numGardeners + ", L: " + numLumberjacks + ", S: " + numScouts + ", X: " + numSoldiers);
+        System.out.println("G:" + numGardeners + ", L:" + numLumberjacks + ", S:" + numScouts + ", X:" + numSoldiers);
 
         rc.broadcast(Channel.GARDENER_COUNT, numGardeners);
         rc.broadcast(Channel.LUMBERJACK_COUNT, numLumberjacks);

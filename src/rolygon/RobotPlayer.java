@@ -19,6 +19,7 @@ public strictfp class RobotPlayer {
     public static void run(RobotController rc) throws GameActionException {
         RobotPlayer.rc = rc;
         RobotPlayer.enemyTeam = rc.getTeam().opponent();
+        MapLocation[] enemyArchonLocations = rc.getInitialArchonLocations(enemyTeam);
 
         RobotType rtype = rc.getType();
         switch (rtype) {
@@ -33,6 +34,7 @@ public strictfp class RobotPlayer {
             case LUMBERJACK:
                 Node lumberjackBehaviors = createLumberjackBehaviors();
                 BehaviorTree lumberjackTree = new BehaviorTree(lumberjackBehaviors);
+                lumberjackTree.addMemory(Key.ENEMY_ARCHON_LOCATIONS, enemyArchonLocations);
                 runLumberjack(lumberjackTree);
                 break;
             case SCOUT:
@@ -42,7 +44,6 @@ public strictfp class RobotPlayer {
             case SOLDIER:
                 Node soldierBehaviors = createSoldierBehaviors();
                 BehaviorTree soldierTree = new BehaviorTree(soldierBehaviors);
-                MapLocation[] enemyArchonLocations = rc.getInitialArchonLocations(enemyTeam);
                 soldierTree.addMemory(Key.ENEMY_ARCHON_LOCATIONS, enemyArchonLocations);
                 runSoldier(soldierTree);
                 break;
