@@ -34,7 +34,7 @@ public class BugNavBehavior implements Behavior {
             // try to move left
             boolean idIsEven = ((rc.getID() % 1) == 0);
             for (int i = 0; i < 8; i++) {
-                toGoal = idIsEven ? toGoal.rotateRightDegrees(45) : toGoal.rotateRightDegrees(45);
+                toGoal = idIsEven ? toGoal.rotateRightDegrees(45) : toGoal.rotateLeftDegrees(45);
                 if (rc.canMove(toGoal)) {
                     rc.move(toGoal);
                     return RunResult.IN_PROGRESS;
