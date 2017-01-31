@@ -11,16 +11,19 @@ import ddg.util.Randomizer;
 public class ManageForestBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
+        System.out.println("MANAGE FOREST");
         // plant a tree
         int roundNum = rc.getRoundNum();
-        if (roundNum > 79 && roundNum % 40 == 0) {
-            Direction dir = Randomizer.getRandomDirection();
-            for (int i = 0; i < 10; i++) {
+        if (roundNum > 79) {// && (roundNum % 10 == 0)) {
+            int inc = 30;
+            int numTries = 360 / inc - 1;
+            Direction dir = new Direction(0);
+            for (int i = 0; i < numTries; i++) {
                 if (rc.canPlantTree(dir)) {
                     rc.plantTree(dir);
                     return RunResult.FINISHED;
                 } else {
-                    dir = dir.rotateLeftDegrees(45);
+                    dir = dir.rotateLeftDegrees(inc);
                 }
             }
         }
@@ -34,10 +37,10 @@ public class ManageForestBehavior implements Behavior {
         // take the 3 worst and try to water one of them
         for (TreeInfo tree : threeWorst) {
             MapLocation treeLocation = tree.getLocation();
-            Direction toTree = rc.getLocation().directionTo(treeLocation);
-            if (rc.canMove(toTree) && !rc.hasMoved()) {
-                rc.move(toTree);
-            }
+//            Direction toTree = rc.getLocation().directionTo(treeLocation);
+//            if (rc.canMove(toTree) && !rc.hasMoved()) {
+//                rc.move(toTree);
+//            }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
                 return RunResult.FINISHED;

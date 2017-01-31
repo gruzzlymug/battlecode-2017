@@ -53,11 +53,15 @@ public class BuildOrderBehavior implements Behavior {
                         System.out.println("built " + nextRobot);
                         rc.buildRobot(nextRobot, dir);
                         currentRobot++;
-                        return RunResult.FINISHED;
+                        return RunResult.IN_PROGRESS;
                     }
                     dir = dir.rotateLeftDegrees(i * 45);
                 }
 //                System.out.println("could not build " + nextRobot + " B: " + rc.getTeamBullets());
+                if (rc.getTeamBullets() < 100) {
+                    // forget building, just plant trees
+                    return RunResult.FINISHED;
+                }
                 return RunResult.SKIPPED;
             } else {
                 currentRobot++;

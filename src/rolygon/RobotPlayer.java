@@ -89,15 +89,21 @@ public strictfp class RobotPlayer {
         gardenerDodge.addPredicate(new UnderFirePredicate());
         gardenerDodge.addNode(new DodgeBulletBehavior());
 
-        PrioritySelector gardenerPriorities = new PrioritySelector();
-        gardenerPriorities.addNode(gardenerDodge);
-        gardenerPriorities.addNode(new ManageForestBehavior());
         BuildOrderBehavior builder = new BuildOrderBehavior();
         builder.setBuildConfig(buildOrder, buildTarget);
+
+        PrioritySelector gardenerPriorities = new PrioritySelector();
+        gardenerPriorities.addNode(gardenerDodge);
         gardenerPriorities.addNode(builder);
         gardenerPriorities.addNode(new RandomMoveBehavior());
 
-        return gardenerPriorities;
+        // new
+        Sequence gardenerSequence = new Sequence();
+//        gardenerSequence.addNode(gardenerPriorities);
+        gardenerSequence.addNode(builder);
+        gardenerSequence.addNode(new ManageForestBehavior());
+
+        return gardenerSequence;
     }
 
     private static Node createLumberjackBehaviors() {
