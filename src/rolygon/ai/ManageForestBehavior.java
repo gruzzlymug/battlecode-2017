@@ -14,12 +14,14 @@ public class ManageForestBehavior implements Behavior {
         System.out.println("MANAGE FOREST");
         // plant a tree
         int roundNum = rc.getRoundNum();
-        if (roundNum > 79) {// && (roundNum % 10 == 0)) {
-            int inc = 30;
-            int numTries = 360 / inc - 1;
-            Direction dir = new Direction(0);
+        if ((roundNum > 79) && (roundNum % 40 == 0)) {
+            System.out.println("want to plant...");
+            int inc = 60;
+            int numTries = (360 / inc) - 1;
+            Direction dir = new Direction((float)Math.PI / -2.0F);
             for (int i = 0; i < numTries; i++) {
                 if (rc.canPlantTree(dir)) {
+                    System.out.println("...tree");
                     rc.plantTree(dir);
                     return RunResult.FINISHED;
                 } else {
@@ -37,10 +39,10 @@ public class ManageForestBehavior implements Behavior {
         // take the 3 worst and try to water one of them
         for (TreeInfo tree : threeWorst) {
             MapLocation treeLocation = tree.getLocation();
-//            Direction toTree = rc.getLocation().directionTo(treeLocation);
-//            if (rc.canMove(toTree) && !rc.hasMoved()) {
-//                rc.move(toTree);
-//            }
+            Direction toTree = rc.getLocation().directionTo(treeLocation);
+            if (rc.canMove(toTree) && !rc.hasMoved()) {
+                rc.move(toTree);
+            }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
                 return RunResult.FINISHED;
