@@ -3,6 +3,7 @@ package rolygon.ai;
 import battlecode.common.*;
 import ddg.ai.Behavior;
 import ddg.ai.Context;
+import ddg.loco.Mover;
 import ddg.util.Randomizer;
 import ddg.comm.Channel;
 import ddg.comm.Value;
@@ -46,7 +47,7 @@ public class ScoutMapBehavior implements Behavior {
                 offsetDeg = Randomizer.rollDie(30) * 12;
                 numTries = 0;
             } else if (robotLocation.distanceTo(origin) > 15.0) {
-                if (tryMove(rc, toGoal, 30, 2)) {
+                if (Mover.tryMove(rc, toGoal, 30, 2)) {
                     numTries = 0;
                 } else {
                     numTries++;
@@ -65,7 +66,7 @@ public class ScoutMapBehavior implements Behavior {
                 }
             }
             toGoal = goals[idxGoal].rotateLeftDegrees(offsetDeg);
-            if (tryMove(rc, toGoal, 30, 2)) {
+            if (Mover.tryMove(rc, toGoal, 30, 2)) {
                 findExtents(rc);
                 numTries = 0;
             } else {
@@ -111,48 +112,5 @@ public class ScoutMapBehavior implements Behavior {
         if (needToNotify) {
             rc.broadcast(Channel.MAP_EXT_CHANGED, Value.TRUE);
         }
-    }
-
-    /**
-     * Attempts to move in a given direction, while avoiding small obstacles direction in the path.
-     *
-     * @param dir The intended direction of movement
-     * @param degreeOffset Spacing between checked directions (degrees)
-     * @param checksPerSide Number of extra directions checked on each side, if intended direction was unavailable
-     * @return true if a move was performed
-     * @throws GameActionException
-     */
-    static boolean tryMove(RobotController rc, Direction dir, float degreeOffset, int checksPerSide) throws GameActionException {
-        if (rc.hasMoved()) {
-            return false;
-        }
-
-        // First, try intended direction
-        if (rc.canMove(dir)) {
-            rc.move(dir);
-            return true;
-        }
-
-        // Now try a bunch of similar angles
-        boolean moved = false;
-        int currentCheck = 1;
-
-        while(currentCheck<=checksPerSide) {
-            // Try the offset of the left side
-            if(rc.canMove(dir.rotateLeftDegrees(degreeOffset*currentCheck))) {
-                rc.move(dir.rotateLeftDegrees(degreeOffset*currentCheck));
-                return true;
-            }
-            // Try the offset on the right side
-            if(rc.canMove(dir.rotateRightDegrees(degreeOffset*currentCheck))) {
-                rc.move(dir.rotateRightDegrees(degreeOffset*currentCheck));
-                return true;
-            }
-            // No move performed, try slightly further
-            currentCheck++;
-        }
-
-        // A move never happened, so return false.
-        return false;
     }
 }
