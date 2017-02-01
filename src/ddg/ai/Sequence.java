@@ -45,7 +45,6 @@ public class Sequence implements Node {
                     currentNode = size - 1;
                     break;
                 case SKIP_AFTER_COMPLETE:
-                default:
                     return RunResult.SKIPPED;
             }
         }
