@@ -37,14 +37,23 @@ public class Sequence implements Node {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
         if (currentNode >= size) {
-            return RunResult.SKIPPED;
+            switch (mode) {
+                case REPEAT_ALL:
+                    currentNode = 0;
+                    break;
+                case REPEAT_LAST:
+                    currentNode = size - 1;
+                    break;
+                case SKIP_AFTER_COMPLETE:
+                    return RunResult.SKIPPED;
+            }
         }
+
         RunResult result = nodes[currentNode].run(rc, context);
         if (result == RunResult.SKIPPED || result == RunResult.FINISHED) {
             currentNode++;
         }
         if (currentNode >= size) {
-            currentNode = 0;
             return RunResult.FINISHED;
         }
         return RunResult.IN_PROGRESS;
