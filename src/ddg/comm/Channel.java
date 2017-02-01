@@ -6,6 +6,10 @@ package ddg.comm;
  * 10000 channels
  */
 public class Channel {
+    // used to ensure archon logic only runs once
+    final public static int LAST_ARCHON_RUN = 0;
+    final public static int ARCHON_LEADER = 1;
+
     // for use when counting
     final public static int GARDENER_SUM = 20;
     final public static int LUMBERJACK_SUM = 21;
