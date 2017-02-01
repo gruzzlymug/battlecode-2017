@@ -63,15 +63,33 @@ public class ArchonThinkBehavior implements Behavior {
         }
     }
 
+    private void loadMapDimensions(RobotController rc) throws GameActionException {
+        mapLeft = rc.readBroadcast(Channel.MAP_EXT_LEFT);
+        mapRight = rc.readBroadcast(Channel.MAP_EXT_RIGHT);
+        mapTop = rc.readBroadcast(Channel.MAP_EXT_TOP);
+        mapBottom = rc.readBroadcast(Channel.MAP_EXT_BOTTOM);
+        topRight = new MapLocation(mapRight, mapTop);
+        bottomLeft = new MapLocation(mapLeft, mapBottom);
+    }
+
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
+        int lastLeader = rc.readBroadcast(Channel.ARCHON_LEADER);
+        int lastArchonRun = rc.readBroadcast(Channel.LAST_ARCHON_RUN);
+        int roundNum = rc.getRoundNum();
+        if (lastArchonRun != roundNum) {
+            rc.broadcast(Channel.LAST_ARCHON_RUN, roundNum);
+            int robotID = rc.getID();
+            if (lastLeader != robotID) {
+                loadMapDimensions(rc);
+                rc.broadcast(Channel.ARCHON_LEADER, robotID);
+            }
+        } else {
+            return RunResult.SKIPPED;
+        }
+
         if (rc.readBroadcast(Channel.MAP_EXT_CHANGED) == Value.TRUE) {
-            mapLeft = rc.readBroadcast(Channel.MAP_EXT_LEFT);
-            mapRight = rc.readBroadcast(Channel.MAP_EXT_RIGHT);
-            mapTop = rc.readBroadcast(Channel.MAP_EXT_TOP);
-            mapBottom = rc.readBroadcast(Channel.MAP_EXT_BOTTOM);
-            topRight = new MapLocation(mapRight, mapTop);
-            bottomLeft = new MapLocation(mapLeft, mapBottom);
+            loadMapDimensions(rc);
             rc.broadcast(Channel.MAP_EXT_CHANGED, Value.FALSE);
         }
 
