@@ -8,11 +8,23 @@ import battlecode.common.RobotController;
  * the previous ones completes.
  */
 public class Sequence implements Node {
+    public enum Mode {
+        REPEAT_ALL,
+        REPEAT_LAST,
+        SKIP_AFTER_COMPLETE
+    }
+
     // TODO what are optimal storage strategies in terms of bytecode use? count access operations.
     // TODO should these be formally grouped for reusabilty?
     Node[] nodes = new Node[4];
     int size;
     int currentNode;
+
+    Mode mode;
+
+    public Sequence(Mode mode) {
+        this.mode = mode;
+    }
 
     public void addNode(Node node) {
         if (size >= nodes.length) {

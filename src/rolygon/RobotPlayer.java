@@ -116,7 +116,7 @@ public strictfp class RobotPlayer {
         scoutDodge.addPredicate(new UnderFirePredicate());
         scoutDodge.addNode(new DodgeBulletBehavior());
 
-        Sequence movement = new Sequence();
+        Sequence movement = new Sequence(Sequence.Mode.REPEAT_ALL);
         movement.addNode(new ScoutMapBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
@@ -136,7 +136,7 @@ public strictfp class RobotPlayer {
 
         PredicateSelector soldierAttack = new PredicateSelector();
         soldierAttack.addPredicate(new EnemyInRangePredicate());
-        Sequence attackSequence = new Sequence();
+        Sequence attackSequence = new Sequence(Sequence.Mode.REPEAT_ALL);
         attackSequence.addNode(new RandomMoveBehavior());
         attackSequence.addNode(new RangedAttackBehavior());
         soldierAttack.addNode(attackSequence);
