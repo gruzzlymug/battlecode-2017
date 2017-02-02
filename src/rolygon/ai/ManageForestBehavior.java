@@ -11,7 +11,6 @@ import ddg.util.Randomizer;
 public class ManageForestBehavior implements Behavior {
     @Override
     public RunResult run(RobotController rc, Context context) throws GameActionException {
-        System.out.println("MANAGE FOREST");
         // plant a tree
         int roundNum = rc.getRoundNum();
         if ((roundNum > 79) && (roundNum % 40 == 0)) {

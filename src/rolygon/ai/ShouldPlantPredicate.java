@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by nobody on 1/30/2017.
  */
-public class AwayFromArchonPredicate implements Predicate {
+public class ShouldPlantPredicate implements Predicate {
     final private static float minDistance = 7.0F;
     private boolean isAway;
     @Override

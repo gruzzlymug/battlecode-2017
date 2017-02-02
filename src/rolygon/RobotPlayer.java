@@ -86,19 +86,19 @@ public strictfp class RobotPlayer {
         int[] buildTarget = { 2, 10, 20 };
 
         PredicateSelector gardenerGrow = new PredicateSelector();
-        gardenerGrow.addPredicate(new AwayFromArchonPredicate());
+        gardenerGrow.addPredicate(new ShouldPlantPredicate());
 
         Sequence gardenerSequence = new Sequence(Sequence.Mode.REPEAT_ALL);
         gardenerSequence.addNode(new ManageForestBehavior());
-        BuildOrderBehavior builder = new BuildOrderBehavior();
-        gardenerSequence.addNode(builder);
+//        BuildOrderBehavior builder = new BuildOrderBehavior();
+//        gardenerSequence.addNode(builder);
         gardenerGrow.addNode(gardenerSequence);
 
-        builder.setBuildConfig(buildOrder, buildTarget);
+//        builder.setBuildConfig(buildOrder, buildTarget);
 
         PrioritySelector gardenerPriorities = new PrioritySelector();
         gardenerPriorities.addNode(gardenerGrow);
-        gardenerPriorities.addNode(builder);
+//        gardenerPriorities.addNode(builder);
         gardenerPriorities.addNode(new RandomMoveBehavior());
 
         // new
