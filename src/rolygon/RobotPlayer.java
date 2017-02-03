@@ -69,7 +69,7 @@ public strictfp class RobotPlayer {
         // TODO remove or fix before using. 644 rounds w/o it
         //archonPriorities.addNode(archonAvoid);
         archonPriorities.addNode(new BuildGardenersBehavior());
-        archonPriorities.addNode(new RandomMoveBehavior());
+//        archonPriorities.addNode(new RandomMoveBehavior());
 
         // perform standard think and then run priorities
 //        Sequence archonSequence = new Sequence();
@@ -85,17 +85,23 @@ public strictfp class RobotPlayer {
         };
         int[] buildTarget = { 2, 10, 20 };
 
-        PredicateSelector gardenerDodge = new PredicateSelector();
-        gardenerDodge.addPredicate(new UnderFirePredicate());
-        gardenerDodge.addNode(new DodgeBulletBehavior());
+        PredicateSelector gardenerGrow = new PredicateSelector();
+        gardenerGrow.addPredicate(new ShouldPlantPredicate());
+
+        Sequence gardenerSequence = new Sequence(Sequence.Mode.REPEAT_ALL);
+        gardenerSequence.addNode(new ManageForestBehavior());
+//        BuildOrderBehavior builder = new BuildOrderBehavior();
+//        gardenerSequence.addNode(builder);
+        gardenerGrow.addNode(gardenerSequence);
+
+//        builder.setBuildConfig(buildOrder, buildTarget);
 
         PrioritySelector gardenerPriorities = new PrioritySelector();
-        gardenerPriorities.addNode(gardenerDodge);
-        gardenerPriorities.addNode(new ManageForestBehavior());
-        BuildOrderBehavior builder = new BuildOrderBehavior();
-        builder.setBuildConfig(buildOrder, buildTarget);
-        gardenerPriorities.addNode(builder);
+        gardenerPriorities.addNode(gardenerGrow);
+//        gardenerPriorities.addNode(builder);
         gardenerPriorities.addNode(new RandomMoveBehavior());
+
+        // new
 
         return gardenerPriorities;
     }
@@ -117,6 +123,7 @@ public strictfp class RobotPlayer {
         scoutDodge.addNode(new DodgeBulletBehavior());
 
         Sequence movement = new Sequence(Sequence.Mode.REPEAT_ALL);
+//        Sequence movement = new Sequence(Sequence.Mode.SKIP_AFTER_COMPLETE);
         movement.addNode(new ScoutMapBehavior(rc));
         RandomMoveBehavior moveScout = new RandomMoveBehavior();
         movement.addNode(moveScout);
@@ -137,6 +144,7 @@ public strictfp class RobotPlayer {
         PredicateSelector soldierAttack = new PredicateSelector();
         soldierAttack.addPredicate(new EnemyInRangePredicate());
         Sequence attackSequence = new Sequence(Sequence.Mode.REPEAT_ALL);
+//        Sequence attackSequence = new Sequence(Sequence.Mode.SKIP_AFTER_COMPLETE);
         attackSequence.addNode(new RandomMoveBehavior());
         attackSequence.addNode(new RangedAttackBehavior());
         soldierAttack.addNode(attackSequence);

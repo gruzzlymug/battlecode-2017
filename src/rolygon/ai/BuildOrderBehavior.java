@@ -45,7 +45,7 @@ public class BuildOrderBehavior implements Behavior {
                     break;
             }
             if (desired > have) {
-                System.out.println("Have " + have + " " + nextRobot + "s, want " + desired + " B: " + rc.getTeamBullets());
+//                System.out.println("Have " + have + " " + nextRobot + "s, want " + desired + " B: " + rc.getTeamBullets());
 //                Direction dir = Randomizer.getRandomDirection();
                 Direction dir = new Direction((float)Math.PI / 2);
                 for (int i = 0; i < 8; i++) {
@@ -53,7 +53,7 @@ public class BuildOrderBehavior implements Behavior {
                         System.out.println("built " + nextRobot);
                         rc.buildRobot(nextRobot, dir);
                         currentRobot++;
-                        return RunResult.FINISHED;
+                        return RunResult.IN_PROGRESS;
                     }
                     dir = dir.rotateLeftDegrees(i * 45);
                 }
