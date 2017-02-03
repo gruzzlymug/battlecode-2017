@@ -2,47 +2,47 @@ package rolygon.ai;
 
 import battlecode.common.*;
 import ddg.ai.Context;
+import ddg.ai.Key;
 import ddg.ai.Predicate;
-import ddg.comm.Channel;
-import ddg.loco.Mover;
-
-import java.util.Map;
 
 /**
  * Created by nobody on 1/30/2017.
  */
 public class ShouldPlantPredicate implements Predicate {
     final private static float minDistance = 7.0F;
-    private boolean isAway;
+    private boolean goodSpot;
+    private boolean settled;
     @Override
     public Predicate test(RobotController rc, Context context) throws GameActionException {
-        MapLocation[] archonLocations = rc.getInitialArchonLocations(rc.getTeam());
-        MapLocation robotLocation = rc.getLocation();
-        // the further the game goes, the further these guys oughta go...
-        float percentDone = rc.getRoundNum() / GameConstants.GAME_DEFAULT_ROUNDS;
-        float handicap = percentDone * 0.25F;
-        float scaledDistance = minDistance + handicap;
-        isAway = true;
-        if (archonLocations.length > 0) {
-            MapLocation closest = archonLocations[0];
-            for (MapLocation archonLocation : archonLocations) {
-                float howFar = robotLocation.distanceTo(archonLocation);
-                if (howFar < robotLocation.distanceTo(closest)) {
-                    closest = archonLocation;
-                }
-                isAway = isAway && (howFar > scaledDistance);
-            }
+        goodSpot = settled || (noNearbyTeammates(rc) && notTooCloseToWall(rc));
+        if (goodSpot && !settled) {
+            settled = true;
         }
         return this;
     }
 
     @Override
     public boolean isTrue() {
-        return isAway;
+        return goodSpot;
     }
 
     @Override
     public boolean isFalse() {
-        return !isAway;
+        return !goodSpot;
+    }
+
+    private boolean noNearbyTeammates(RobotController rc) {
+        boolean noOneToBother = true;
+        float minDistance = 7;
+        RobotInfo[] nearbyTeammates = rc.senseNearbyRobots(minDistance, rc.getTeam());
+        for (RobotInfo robot : nearbyTeammates) {
+            RobotType type = robot.getType();
+            noOneToBother = noOneToBother && (type != RobotType.GARDENER && type != RobotType.ARCHON);
+        }
+        return noOneToBother;
+    }
+
+    private boolean notTooCloseToWall(RobotController rc) {
+        return true;
     }
 }

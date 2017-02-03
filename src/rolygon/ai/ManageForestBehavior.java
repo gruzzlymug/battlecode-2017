@@ -22,7 +22,6 @@ public class ManageForestBehavior implements Behavior {
                 if (rc.canPlantTree(dir)) {
                     System.out.println("...tree");
                     rc.plantTree(dir);
-                    return RunResult.FINISHED;
                 } else {
                     dir = dir.rotateLeftDegrees(inc);
                 }
@@ -32,7 +31,8 @@ public class ManageForestBehavior implements Behavior {
         TreeInfo[] trees = rc.senseNearbyTrees(rc.getType().sensorRadius, rc.getTeam());
         TreeInfo[] threeWorst = selectDyingTrees(trees, 3);
         if (threeWorst.length > 0 && threeWorst[0].getHealth() > (GameConstants.BULLET_TREE_MAX_HEALTH - GameConstants.WATER_HEALTH_REGEN_RATE)) {
-            return RunResult.SKIPPED;
+            // it never ends...
+            return RunResult.IN_PROGRESS;
         }
 
         // take the 3 worst and try to water one of them
@@ -44,10 +44,11 @@ public class ManageForestBehavior implements Behavior {
             }
             if (rc.canWater(treeLocation)) {
                 rc.water(treeLocation);
-                return RunResult.FINISHED;
             }
         }
-        return RunResult.SKIPPED;
+
+        // it never ends...
+        return RunResult.IN_PROGRESS;
     }
 
     // select K trees with the lowest health.
