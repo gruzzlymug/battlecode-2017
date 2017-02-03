@@ -23,7 +23,7 @@ public class ShouldPlantPredicate implements Predicate {
         float handicap = percentDone * 0.25F;
         float scaledDistance = minDistance + handicap;
         isAway = true;
-        if (archonLocations.length > 0){
+        if (archonLocations.length > 0) {
             MapLocation closest = archonLocations[0];
             for (MapLocation archonLocation : archonLocations) {
                 float howFar = robotLocation.distanceTo(archonLocation);
@@ -31,11 +31,6 @@ public class ShouldPlantPredicate implements Predicate {
                     closest = archonLocation;
                 }
                 isAway = isAway && (howFar > scaledDistance);
-            }
-            if (!isAway && robotLocation.distanceTo(closest) < scaledDistance * 0.75) {
-                // just get away
-                Direction awayFromArchon = closest.directionTo(robotLocation);
-                Mover.tryMove(rc, awayFromArchon, 45, 2);
             }
         }
         return this;

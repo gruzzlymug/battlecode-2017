@@ -16,7 +16,7 @@ public class ManageForestBehavior implements Behavior {
         if ((roundNum > 79) && (roundNum % 40 == 0)) {
             System.out.println("want to plant...");
             int inc = 60;
-            int numTries = (360 / inc) - 1;
+            int numTries = 360 / inc;
             Direction dir = new Direction((float)Math.PI / -2.0F);
             for (int i = 0; i < numTries; i++) {
                 if (rc.canPlantTree(dir)) {
